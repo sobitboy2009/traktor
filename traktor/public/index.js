@@ -1,0 +1,138 @@
+// ================================
+// CONFIG
+// ================================
+const API_BASE = "http://localhost:8080/api";
+
+// ================================
+// DASHBOARD LOAD
+// ================================
+document.addEventListener("DOMContentLoaded", () => {
+    loadDashboard();
+});
+
+// ================================
+// LOAD DASHBOARD DATA
+// ================================
+async function loadDashboard() {
+    try {
+        const res = await fetch(`${API_BASE}/dashboard`);
+
+        if (!res.ok) {
+            throw new Error("Dashboard API error");
+        }
+
+        const data = await res.json();
+
+        // SAFE UPDATE (если элементов нет — не падаем)
+        const usersEl = document.getElementById("usersCount");
+        const studentsEl = document.getElementById("studentsCount");
+        const docsEl = document.getElementById("documentsCount");
+
+        if (usersEl) usersEl.textContent = data.users ?? 0;
+        if (studentsEl) studentsEl.textContent = data.students ?? 0;
+        if (docsEl) docsEl.textContent = data.documents ?? 0;
+
+        console.log("✅ Dashboard loaded:", data);
+
+    } catch (err) {
+        console.error("❌ Dashboard load failed:", err);
+
+        // FALLBACK VALUES
+        setZero("usersCount");
+        setZero("studentsCount");
+        setZero("documentsCount");
+    }
+}
+
+// ================================
+// HELPERS
+// ================================
+function setZero(id) {
+    const el = document.getElementById(id);
+    if (el) el.textContent = "0";
+}
+
+/* ================================
+   STUDENTS (FOR OTHER PAGES)
+================================ */
+
+// GET ALL STUDENTS
+async function getStudents() {
+    const res = await fetch(`${API_BASE}/students`);
+    return await res.json();
+}
+
+// GET ONE STUDENT
+async function getStudent(jshshir) {
+    const res = await fetch(`${API_BASE}/students/${jshshir}`);
+    return await res.json();
+}
+
+// CREATE STUDENT
+async function createStudent(data) {
+    const res = await fetch(`${API_BASE}/students`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+    });
+
+    return await res.json();
+}
+
+// UPDATE STUDENT
+async function updateStudent(jshshir, data) {
+    const res = await fetch(`${API_BASE}/students/${jshshir}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+    });
+
+    return await res.json();
+}
+
+// DELETE STUDENT
+async function deleteStudent(jshshir) {
+    const res = await fetch(`${API_BASE}/students/${jshshir}`, {
+        method: "DELETE",
+    });
+
+    return await res.json();
+}
+
+/* ================================
+   DOCUMENTS
+================================ */
+
+async function getDocuments() {
+    const res = await fetch(`${API_BASE}/documents`);
+    return await res.json();
+}
+
+/* ================================
+   INVOICES
+================================ */
+
+async function getInvoices() {
+    const res = await fetch(`${API_BASE}/invoices`);
+    return await res.json();
+}
+
+/* ================================
+   DEBUG (НЕ УДАЛЯЙ)
+================================ */
+window.API = {
+    getStudents,
+    getStudent,
+    createStudent,
+    updateStudent,
+    deleteStudent,
+    getDocuments,
+    getInvoices,
+};
+
+
+ 
+
+//  LOGIN
+
+
