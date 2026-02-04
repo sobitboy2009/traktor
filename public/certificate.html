@@ -1,0 +1,999 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guvohnoma ko'rish</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <link href="https://fonts.googleapis.com/css2?family=Arimo:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-color: #555;
+            font-family: 'Arimo', sans-serif;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .certificate-details {
+            background: white;
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            border-left: 5px solid #004d4d;
+            max-width: 900px;
+            width: 100%;
+        }
+
+        .certificate {
+            width: 800px;
+            height: 560px;
+            background-color: white;
+            position: relative;
+            box-sizing: border-box;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            margin-bottom: 30px;
+        }
+
+        
+
+        /* Контентная часть */
+        .content {
+            position: relative;
+            z-index: 10;
+            padding: 40px 100px;
+            text-align: center;
+        }
+
+        .header-top {
+            font-size: 26px;
+            font-weight: 700;
+            color: #0d4a52;
+            margin-bottom: 2px;
+            letter-spacing: 0.5px;
+        }
+
+        .header-sub {
+            font-size: 24px;
+            font-weight: 700;
+            color: #0d4a52;
+            margin-bottom: 30px;
+        }
+
+        .doc-title {
+            color: #e63946;
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .main-paragraph {
+            font-size: 17px;
+            line-height: 1.5;
+            text-align: center;
+            color: #333;
+            margin-bottom: 25px;
+        }
+
+        .bold-black {
+            font-weight: 800;
+            color: #000;
+        }
+
+        .grades-row {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            align-items: center;
+            margin-top: 40px;
+            padding: 0 20px;
+        }
+
+        .grades-text {
+            text-align: left;
+            font-size: 13px;
+            font-weight: bold;
+            color: #1b8a8a;
+            line-height: 1.4;
+        }
+
+        .qr-area {
+            width: 90px;
+            height: 90px;
+            border: 1px solid #ccc;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .sign-area {
+            text-align: left;
+            width: 180px;
+        }
+
+        .sign-name {
+            font-weight: bold;
+            color: #213a8f;
+            border-bottom: 1px solid #000;
+            display: block;
+            margin-bottom: 2px;
+            font-size: 14px;
+        }
+
+        .sign-desc {
+            background-color: #64b5f6;
+            color: white;
+            font-size: 10px;
+            padding: 1px 4px;
+            display: inline-block;
+        }
+
+        .footer-warning {
+            position: absolute;
+            bottom: 25px;
+            width: 100%;
+            left: 0;
+            text-align: center;
+            font-size: 14px;
+            font-weight: bold;
+            color: #0d4a52;
+        }
+
+        
+
+
+
+
+
+
+/* Левый декор (треугольники смотрят вправо) */
+        .side-decor-left {
+            position: absolute;
+            left: 0; top: 0; bottom: 0;
+            width: 120px;
+            z-index: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .tri-l {
+            position: absolute;
+            width: 0; height: 0;
+            border-top: 40px solid transparent;
+            border-bottom: 40px solid transparent;
+            border-left: 50px solid #004d4d;
+        }
+
+        /* Правый декор (треугольники смотрят влево) */
+        .side-decor-right {
+            position: absolute;
+            right: 0; top: 0; bottom: 0;
+            width: 120px;
+            z-index: 1;
+        }
+        .tri-r {
+            position: absolute;
+            right: 0;
+            width: 0; height: 0;
+            border-top: 40px solid transparent;
+            border-bottom: 40px solid transparent;
+            border-right: 50px solid #004d4d;
+        }
+
+        /* Дополнительные цветные треугольники для имитации фото */
+        .tri-teal { border-left-color: #1b8a8a !important; }
+        .tri-dark { border-left-color: #062c30 !important; }
+        .tri-teal-r { border-right-color: #1b8a8a !important; }
+
+
+
+
+
+
+
+
+
+
+
+
+        /* Кнопки действий */
+        .action-buttons {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+            display: flex;
+            gap: 10px;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .info-item {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #004d4d;
+        }
+        
+        .info-label {
+            font-weight: 600;
+            color: #495057;
+            margin-bottom: 5px;
+            font-size: 14px;
+        }
+        
+        .info-value {
+            font-size: 15px;
+            color: #212529;
+            font-weight: 500;
+        }
+        
+        .certificate-number {
+            font-size: 18px;
+            font-weight: 700;
+            color: #e63946;
+            letter-spacing: 1px;
+        }
+
+        /* Навигация */
+        .navbar-custom {
+            background-color: #004d4d;
+            width: 100%;
+            margin-bottom: 20px;
+        }
+
+        .btn-return {
+            background-color: white;
+            color: #004d4d;
+            border: none;
+        }
+
+        .btn-return:hover {
+            background-color: #f0f0f0;
+            color: #004d4d;
+        }
+
+        @media print {
+            .certificate-details,
+            .action-buttons,
+            .navbar-custom {
+                display: none !important;
+            }
+            
+            body {
+                background: white;
+                padding: 0;
+                margin: 0;
+            }
+            
+            .certificate {
+                box-shadow: none;
+                margin: 0;
+            }
+        }
+
+        @media (max-width: 850px) {
+            .certificate {
+                width: 95%;
+                height: auto;
+                min-height: 560px;
+            }
+            
+            .content {
+                padding: 30px 60px;
+            }
+            
+            .side-decor-left,
+            .side-decor-right {
+                width: 80px;
+            }
+            
+            .tri-l {
+                border-left-width: 40px;
+            }
+            
+            .tri-r {
+                border-right-width: 40px;
+            }
+        }
+
+
+
+
+
+
+
+        .decor-container {
+        position: absolute;
+        left: 0; top: 0; bottom: 0;
+        width: 30%;
+        overflow: hidden;
+    }
+    .decor-container2 {
+        position: absolute;
+        right: 0; top: 0; bottom: 0;
+        width: 30%;
+        transform: rotateX(180deg) scaleX(-1);
+        
+        overflow: hidden;
+    }
+
+    /* Базовый класс для всех фигур */
+    .shape {
+        position: absolute;
+        width: 0; height: 0;
+    }
+
+  
+    .top-dark {
+    position: absolute;
+    
+    width: 0; 
+    height: 0;
+    
+   
+    border-top: 110px solid #002B3D; 
+    border-left: 70px solid transparent;
+    border-right: 60px solid transparent;
+    
+    top: 0; 
+    left: 0;
+}
+
+    /* 2. Зеленый треугольник под ним (смотрит вправо) */
+    .top-green {
+        border-top: 110px solid transparent;
+        border-bottom: 0px solid transparent;
+        border-left: 70px solid #00A88E;
+        top: 0; left: 0;
+    }
+
+    /* 3. Маленький зеленый перевернутый (ниже) */
+    .mid-green-down {
+        border-top: 60px solid #00a88e;
+        border-left: 40px solid transparent;
+        border-right: 40px solid transparent;
+        top: 160px; left: 0;
+        position: absolute;
+        bottom: 0
+    }
+
+    .mid-green-down2 {
+    position: absolute;
+    width: 0; 
+    height: 0;
+    /* Острый угол вверх: используем border-bottom вместо border-top */
+    border-bottom: 60px solid #002B3D; 
+    border-left: 40px solid transparent;
+    border-right: 40px solid transparent;
+    
+    /* Позиционирование */
+    top: 260px; 
+    left: 10px;
+}
+
+    /* 4. Темный "клюв" слева */
+    .mid-dark-left {
+    position: absolute;
+    width: 0;
+    height: 0;
+    
+    border-top: 60px solid #116558; 
+    border-right: 60px solid transparent;
+    top: 340px; 
+    left: 0;
+}
+    .mid-dark-left2 {
+    position: absolute;
+    width: 0;
+    height: 0;
+    /* Меняем border-top на border-bottom для отражения по вертикали */
+    border-bottom: 100px solid #11584d; 
+    border-right: 100px solid transparent;
+    
+    top: 480px; 
+    left: 0;
+}
+    .mid-dark-left3 {
+    position: absolute;
+    width: 0;
+    height: 0;
+    /* Убираем одну сторону, чтобы получить прямой угол */
+    border-top: 100px solid #002B3D; 
+    border-right: 100px solid transparent;
+    top: 578px; 
+    left: 0;
+    z-index: 6;
+}
+
+    /* 5. Сложная композиция снизу (Зеленый + Темный внахлест) */
+    .bottom-group {
+        position: absolute;
+        bottom: 0; left: 0;
+    }
+
+    .bot-green-tri {
+        border-bottom: 100px solid #1b8a8a;
+        border-right: 100px solid transparent;
+        position: absolute; bottom: 0; left: 0;
+    }
+
+    .bot-dark-overlay {
+        border-bottom: 140px solid #062c30;
+        border-left: 110px solid transparent;
+        position: absolute; bottom: 0; left: 40px;
+    }
+        /* Контейнер для всей нижней композиции */
+.footer-decor {
+        position: absolute;
+        bottom: 0; left: 0;
+        width: 350px; height: 300px;
+    }
+
+    .shape {
+        position: absolute;
+        bottom: 0; left: 0;
+    }
+
+    /* 1. Большой темно-синий фон (нижний слой) */
+    .dark-base {
+        width: 200px; height: 180px;
+        background-color: #062c30;
+        clip-path: polygon(0 0, 100% 100%, 0 100%);
+    }
+
+    
+
+    .grey-grad0 {
+    width: 70px; 
+    height: 55px;
+    background: linear-gradient(135deg, transparent, #737679);
+    bottom: 306px; 
+    left: 36px;
+    clip-path: polygon(50% 0, 0 100%, 100% 100%);
+    z-index: 2;
+}
+    .grey-grad {
+        width: 75px; height: 57px;
+        background: linear-gradient(135deg, #003344, #003344);
+        bottom: 88px; left: 20px;
+        clip-path: polygon(0 0, 100% 0, 50% 100%);
+        z-index: 2;
+    }
+    .grey-grad2 {
+        width: 70px; height: 45px;
+        background: linear-gradient(135deg, #9fa2a4, #68696b);
+        clip-path: polygon(50% 0%, 100% 100%, 0% 100%);
+        bottom: 0; left: 101px;
+        z-index: 0;
+    }
+    .grey-grad3 {
+    position: absolute; 
+    width: 110px; 
+    height: 90px;
+    background: linear-gradient(135deg, #00A88E, #008a76); 
+    bottom: 0; 
+    left: -5px;
+    clip-path: polygon(50% 0%, 100% 100%, 0% 100%);
+    
+    z-index: 2;
+}
+
+   
+    .teal-arrow {
+        width: 60px; height: 57px;
+        background-color: #7a7e83;
+        bottom: 88px;
+        left: 3px;
+        clip-path: polygon(0 100%, 90% 100%, 34% 0);
+        
+    }
+
+    .teal-arrow2 {
+        width: 70px; height: 58px;
+        background-color: #042125;
+        bottom: 88px; left: 57px;
+        clip-path: polygon(0 100%, 100% 106%, 52% 0);
+        z-index: 3;
+    }
+
+    .teal-arrow3 {
+        width: 90px; height: 70px;
+        background: linear-gradient(135deg, #042125, #1b5860); 
+        bottom: 150px; left: 88px;
+        clip-path: polygon(0 100%, 100% 106%, 46% 0);
+        z-index: 3;
+    }
+
+    .teal-arrow4 {
+    position: absolute; 
+    width: 70px; 
+    height: 60px;
+    background: linear-gradient(135deg, #00A88E, #1b5860); 
+    bottom: 178px; 
+    left: 70px;
+    clip-path: polygon(0 0, 100% 0, 50% 100%);
+    z-index: 3;
+}
+
+    /* 5. Маленькая стрелочка справа внизу */
+    .small-arrow {
+        width: 60px; height: 34px;
+        background-color: #00a88e;
+        bottom: 50px; left: 140px;
+        clip-path: polygon(0 0, 100% 0, 50% 100%);
+    }
+    
+
+    </style>
+</head>
+<body>
+    <!-- Навигация -->
+    <nav class="navbar navbar-expand-lg navbar-custom">
+        <div class="container">
+            <a class="navbar-brand text-white" href="#">
+                <i class="bi bi-award"></i> MEXANIZATORLAR MAKTABI - Guvohnoma
+            </a>
+            <button class="btn btn-return" onclick="window.history.back()">
+                <i class="bi bi-arrow-left"></i> Orqaga
+            </button>
+        </div>
+    </nav>
+
+    <!-- Детальная информация о сертификате -->
+    <div class="certificate-details">
+        <h3 class="mb-4" style="color: #004d4d;">
+            <i class="bi bi-info-circle"></i> Guvohnoma ma'lumotlari
+        </h3>
+        
+        <div class="info-grid" id="certificateDetails">
+            <!-- Данные будут загружены через JavaScript -->
+        </div>
+    </div>
+
+    <!-- Сам сертификат -->
+    <div class="certificate">
+        <div class="decor-container">
+    <div class="shape top-dark"></div>
+    <div class="shape top-green"></div>
+    <div class=" mid-green-down"></div>
+    <div class=" mid-green-down2"></div>
+    <div class="shape mid-dark-left"></div>
+    <div class="shape mid-dark-left2"></div>
+    <div class="shape mid-dark-left3"></div>
+   <div class="footer-decor"> 
+    <div class="shape grey-grad0"></div>
+    <div class="shape grey-grad"></div>
+    <div class="shape grey-grad2"></div>
+    <div class="shape grey-grad3"></div>  
+    <div class="shape teal-arrow"></div>
+    <div class="shape teal-arrow2"></div>
+    <div class="shape teal-arrow3"></div>
+    <div class="shape teal-arrow4"></div>
+    <div class="shape small-arrow"></div>
+   </div>
+    
+</div>
+
+        <div class="decor-container2">
+    <div class="shape top-dark"></div>
+    <div class="shape top-green"></div>
+    <div class=" mid-green-down"></div>
+    <div class=" mid-green-down2"></div>
+    <div class="shape mid-dark-left"></div>
+    <div class="shape mid-dark-left2"></div>
+    <div class="shape mid-dark-left3"></div>
+   <div class="footer-decor">
+    <div class="shape grey-grad0"></div>
+    <div class="shape grey-grad"></div>
+    <div class="shape grey-grad2"></div>
+    <div class="shape grey-grad3"></div>
+    <div class="shape teal-arrow"></div>
+    <div class="shape teal-arrow2"></div>
+    <div class="shape teal-arrow3"></div>
+    <div class="shape teal-arrow4"></div>
+    
+   </div>
+    
+</div>
+
+        <div class="content">
+            <div class="header-top">O'ZBEKISTON RESPUBLIKASI</div>
+            <div class="header-sub">"MEXANIZATORLAR MAKTABI" MCHJ</div>
+            
+            <div class="doc-title">GUVOHNOMA № <span id="certNumber">000000</span></div>
+
+            <!-- В тексте сертификата исправляем строку с комиссией -->
+<div class="main-paragraph" id="certificateText">
+    Berildi ushbu guvohnoma <span class="bold-black" id="studentName">FAMILIYA ISM OTASI</span> ga<br>
+    (JShShIR <span class="bold-black" id="jshshir">00000000000000</span>) shu haqidakim u 
+    <span class="bold-black" id="courseStartYear">2024</span>-yilning 
+    <span class="bold-black" id="courseStartDay">16</span>-<span id="courseStartMonth">dekabr</span> dan<br>
+    <span class="bold-black" id="courseEndYear">2025</span>-yilning 
+    <span class="bold-black" id="courseEndDay">24</span>-<span id="courseEndMonth">mart</span> gacha 
+    <span class="bold-black" id="categories">A, B, C, D</span> toifali traktorchi<br>
+    mashinist <span class="bold-black" id="courseHours">280</span> soatlik o'quv kursini tamomladi<br>
+    va <span class="bold-black" id="examYear">2025</span>-yilning 
+    <span class="bold-black" id="examDay">24</span>-<span id="examMonth">mart</span> dagi 
+    <span id="commissionNumberFull">
+        <span class="bold-black" id="commissionNumber">15</span>-sonli
+    </span> imtihon komissiyasining<br>
+    bayoniga asosan bitiruv imtihonlaridan quyidagi baholarni oladi.
+</div>
+
+            <div class="grades-row">
+                <div class="grades-text">
+                    Y.H.Q <span style="color:#213a8f" id="grade1Text">4 (yaxshi)</span><br>
+                    H.X.Q <span style="color:#213a8f" id="grade2Text">4 (yaxshi)</span>
+                </div>
+
+                <div class="qr-area" id="qrCodeContainer">
+                    <!-- QR-код будет сгенерирован здесь -->
+                </div>
+
+                <div class="sign-area">
+                    <span class="sign-name" id="directorName">N ILYASOVA</span>
+                    <span class="sign-desc">Ta'lim muassasasi rahbari</span>
+                </div>
+            </div>
+<br>
+<br>
+            <div class="footer-warning">
+                Ushbu hujjat texnika vositalarini boshqarish huquqini bermaydi
+            </div>
+        </div>
+    </div>
+
+    <!-- Кнопки действий -->
+    <div class="action-buttons">
+        <button class="btn btn-primary btn-lg shadow" onclick="downloadCertificate()" title="Yuklab olish">
+            <i class="bi bi-download"></i>
+        </button>
+        <button class="btn btn-success btn-lg shadow" onclick="window.print()" title="Chop etish">
+            <i class="bi bi-printer"></i>
+        </button>
+        <button class="btn btn-info btn-lg shadow" onclick="shareCertificate()" title="Ulashish">
+            <i class="bi bi-share"></i>
+        </button>
+    </div>
+
+    <div id="debugInfo" style="position: fixed; top: 10px; left: 10px; background: rgba(255,255,255,0.9); padding: 10px; z-index: 9999; border: 1px solid red; display: none;">
+    <button onclick="document.getElementById('debugInfo').style.display='none'">X</button>
+    <pre id="debugContent"></pre>
+</div>
+
+    <!-- Подключаем библиотеки -->
+    <script src="https://cdn.jsdelivr.net/npm/qrcodejs/qrcode.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dom-to-image@2.6.0/dist/dom-to-image.min.js"></script>
+
+    <script>
+
+
+const APP_CONFIG = {
+    useOnlineMode: false,                 // Пока false, после покупки домена → true
+    websiteDomain: "",                    // После покупки: "https://ваш-домен.uz"
+    offlinePrefix: "CERT:"                // Не менять
+};
+// ==================== КОНЕЦ КОНФИГУРАЦИИ ====================
+
+    // Получаем ID из URL
+    const params = new URLSearchParams(window.location.search);
+    const id = params.get('id');
+
+    if (!id) {
+        alert("Guvohnoma ID si topilmadi");
+        window.location.href = 'guvohnomalar-list.html';
+    }
+
+    // Месяцы на узбекском языке
+    const monthsUz = {
+        1: 'yanvar', 2: 'fevral', 3: 'mart', 4: 'aprel',
+        5: 'may', 6: 'iyun', 7: 'iyul', 8: 'avgust',
+        9: 'sentabr', 10: 'oktabr', 11: 'noyabr', 12: 'dekabr'
+    };
+
+    // Функция для форматирования номера сертификата
+    function formatCertificateNumber(certNumber) {
+        if (!certNumber) return '';
+        
+        // Удаляем префикс GUV- если есть
+        let formattedNumber = certNumber;
+        if (formattedNumber.startsWith('GUV-')) {
+            formattedNumber = formattedNumber.substring(4); // Удаляем "GUV-"
+        }
+        
+        // Если остался формат типа "2026-0001", берем только номер
+        if (formattedNumber.includes('-')) {
+            formattedNumber = formattedNumber.split('-').pop();
+        }
+        
+        // Убеждаемся, что это число, если нет - оставляем как есть
+        return formattedNumber;
+    }
+
+    // Загружаем данные документа
+    fetch(`/api/documents/${id}/details`)
+        .then(res => {
+            if (!res.ok) throw new Error("Document not found");
+            return res.json();
+        })
+        .then(doc => {
+            console.log("Document data:", doc);
+            
+            // Форматируем номер сертификата
+            const formattedCertNumber = formatCertificateNumber(doc.certificate_number);
+            const displayCertNumber = formattedCertNumber || doc.id.toString().padStart(6, '0');
+            
+            // Извлекаем даты
+            const courseStart = parseDate(doc.course_start);
+            const courseEnd = parseDate(doc.course_end);
+            const examDate = parseDate(doc.exam_date);
+            
+            // Заполняем детальную информацию
+            document.getElementById('certificateDetails').innerHTML = `
+                <div class="info-item">
+                    <div class="info-label">Guvohnoma raqami</div>
+                    <div class="info-value certificate-number">№${displayCertNumber}</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Talaba F.I.Sh.</div>
+                    <div class="info-value">${doc.student_name}</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">JShShIR</div>
+                    <div class="info-value">${doc.student_jshshir}</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">O'quv kursi</div>
+                    <div class="info-value">${formatDate(doc.course_start)} - ${formatDate(doc.course_end)}</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Imtihon sanasi</div>
+                    <div class="info-value">${formatDate(doc.exam_date)}</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Imtihon komissiyasi</div>
+                    <div class="info-value">${doc.commission_number || '15'}-sonli</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Toifalar</div>
+                    <div class="info-value">${doc.categories}</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Soatlar</div>
+                    <div class="info-value">${doc.course_hours} soat</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Baholar</div>
+                    <div class="info-value">Y.H.Q va H.X.Q: ${doc.grade1 || 4} (yaxshi), Traktor tuzilishi: ${doc.grade2 || 4} (yaxshi)</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Holati</div>
+                    <div class="info-value">
+                        <span class="badge ${doc.status === 'Tasdiqlangan' ? 'bg-success' : 'bg-warning'}">
+                            ${doc.status || 'Tasdiqlangan'}
+                        </span>
+                    </div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Rahbar</div>
+                    <div class="info-value">${doc.director_name || 'N. ILYASOVA'}</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Yaratilgan sana</div>
+                    <div class="info-value">${formatDate(doc.created_at)}</div>
+                </div>
+                ${doc.student_birth_date ? `
+                <div class="info-item">
+                    <div class="info-label">Tug'ilgan sana</div>
+                    <div class="info-value">${formatDate(doc.student_birth_date)}</div>
+                </div>
+                ` : ''}
+                ${doc.student_phone ? `
+                <div class="info-item">
+                    <div class="info-label">Telefon</div>
+                    <div class="info-value">${doc.student_phone}</div>
+                </div>
+                ` : ''}
+            `;
+            
+            // Заполняем сертификат
+            document.getElementById('certNumber').textContent = displayCertNumber;
+            document.getElementById('studentName').textContent = doc.student_name;
+            document.getElementById('jshshir').textContent = doc.student_jshshir;
+            document.getElementById('categories').textContent = doc.categories;
+            document.getElementById('courseHours').textContent = doc.course_hours;
+            
+            // Исправлено: номер комиссии берется из базы
+            const commissionNumber = doc.commission_number || '15';
+            document.getElementById('commissionNumber').textContent = commissionNumber;
+            document.getElementById('commissionNumberFull').innerHTML = 
+                `<span class="bold-black">${commissionNumber}</span>-sonli`;
+                
+            document.getElementById('directorName').textContent = doc.director_name || 'N. ILYASOVA';
+            
+            // Даты
+            if (courseStart) {
+                document.getElementById('courseStartYear').textContent = courseStart.year;
+                document.getElementById('courseStartDay').textContent = courseStart.day;
+                document.getElementById('courseStartMonth').textContent = courseStart.monthName;
+            }
+            
+            if (courseEnd) {
+                document.getElementById('courseEndYear').textContent = courseEnd.year;
+                document.getElementById('courseEndDay').textContent = courseEnd.day;
+                document.getElementById('courseEndMonth').textContent = courseEnd.monthName;
+            }
+            
+            if (examDate) {
+                document.getElementById('examYear').textContent = examDate.year;
+                document.getElementById('examDay').textContent = examDate.day;
+                document.getElementById('examMonth').textContent = examDate.monthName;
+            }
+            
+            // Оценки
+            const grade1 = doc.grade1 || 4;
+            const grade2 = doc.grade2 || 4;
+            document.getElementById('grade1Text').textContent = `${grade1} (yaxshi)`;
+            document.getElementById('grade2Text').textContent = `${grade2} (yaxshi)`;
+            
+            // Генерируем QR-код
+            
+
+            
+let qrContent;
+if (APP_CONFIG.useOnlineMode && APP_CONFIG.websiteDomain) {
+    // РЕЖИМ ОНЛАЙН (после покупки домена)
+    qrContent = `${APP_CONFIG.websiteDomain}/verify.html?cert=${doc.certificate_number || doc.id}`;
+    console.log("QR (online):", qrContent);
+} else {
+    // РЕЖИМ ОФФЛАЙН (пока нет домена)
+    const certData = {
+        id: doc.id,
+        cert_number: doc.certificate_number || doc.id,
+        student_name: doc.student_name,
+        jshshir: doc.student_jshshir,
+        categories: doc.categories,
+        exam_date: formatDate(doc.exam_date),
+        course_hours: doc.course_hours
+    };
+    qrContent = APP_CONFIG.offlinePrefix + JSON.stringify(certData);
+    console.log("QR (offline):", qrContent);
+}
+
+new QRCode(document.getElementById("qrCodeContainer"), {
+    text: qrContent,
+    width: 80,
+    height: 80,
+    colorDark: "#000000",
+    colorLight: "#ffffff",
+    correctLevel: QRCode.CorrectLevel.H
+});
+            
+            // Обновляем заголовок страницы
+            document.title = `Guvohnoma №${displayCertNumber} - ${doc.student_name}`;
+        })
+        .catch(err => {
+            console.error(err);
+            alert("Xatolik: guvohnoma topilmadi yoki serverda xatolik");
+            window.location.href = 'guvohnomalar-list.html';
+        });
+
+    // Функция для парсинга даты
+    function parseDate(dateString) {
+        if (!dateString) return null;
+        
+        try {
+            const date = new Date(dateString);
+            if (isNaN(date.getTime())) return null;
+            
+            const day = date.getDate();
+            const month = date.getMonth() + 1;
+            const year = date.getFullYear();
+            const monthName = monthsUz[month] || 'unknown';
+            
+            return { day, month, year, monthName };
+        } catch (e) {
+            console.error("Error parsing date:", dateString, e);
+            return null;
+        }
+    }
+
+    // Функция для форматирования даты
+    function formatDate(dateString) {
+        if (!dateString) return 'N/A';
+        
+        try {
+            const date = new Date(dateString);
+            if (isNaN(date.getTime())) return dateString;
+            
+            const day = date.getDate().toString().padStart(2, '0');
+            const month = (date.getMonth() + 1).toString().padStart(2, '0');
+            const year = date.getFullYear();
+            return `${day}.${month}.${year}`;
+        } catch (e) {
+            return dateString;
+        }
+    }
+
+    // Функция для скачивания сертификата как изображения
+   function downloadCertificate() {
+        const certificate = document.querySelector('.certificate');
+        const certNumber = document.getElementById('certNumber').textContent;
+        const studentName = document.getElementById('studentName').textContent;
+        
+        html2canvas(certificate, {
+            scale: 2,
+            useCORS: true,
+            logging: false,
+            backgroundColor: '#ffffff'
+        }).then(canvas => {
+            // Создаем ссылку для скачивания
+            const link = document.createElement('a');
+            const fileName = `guvohnoma-${certNumber}-${studentName.replace(/\s+/g, '-')}.png`;
+            link.download = fileName;
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+            
+            // Показываем уведомление
+            showNotification("Guvohnoma yuklab olindi: " + fileName, "success");
+        });
+    }
+
+    // Функция для шаринга
+    function shareCertificate() {
+        const certNumber = document.getElementById('certNumber').textContent;
+        const studentName = document.getElementById('studentName').textContent;
+        const text = `"MMM TRAKTOR SERVIS" MCHJ guvohnomasi №${certNumber}. Talaba: ${studentName}`;
+        
+        if (navigator.share) {
+            navigator.share({
+                title: 'Traktor haydovchisi guvohnomasi',
+                text: text,
+                url: window.location.href
+            });
+        } else {
+            // Копируем ссылку в буфер обмена
+            navigator.clipboard.writeText(window.location.href);
+            showNotification("Havola buferga nusxalandi!", "info");
+        }
+    }
+
+    // Функция для показа уведомлений
+    function showNotification(message, type = 'info') {
+        const alert = document.createElement('div');
+        alert.className = `alert alert-${type} alert-dismissible fade show position-fixed`;
+        alert.style.cssText = `
+            top: 20px;
+            right: 20px;
+            z-index: 9999;
+            min-width: 300px;
+        `;
+        alert.innerHTML = `
+            ${message}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        `;
+        
+        document.body.appendChild(alert);
+        
+        // Автоматически удаляем через 3 секунды
+        setTimeout(() => {
+            alert.remove();
+        }, 3000);
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="uz">
+
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>Yangi O'quvchi - MMM TRAKTOR SERVIS</title>
+
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    
+    <link rel="stylesheet" href="index.css">
+    <style>
+        .form-card {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            padding: 30px;
+        }
+        .form-header {
+            background: linear-gradient(135deg, #0d6efd 0%, #0a58ca 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px 10px 0 0;
+            margin: -30px -30px 30px -30px;
+        }
+        .form-label {
+            font-weight: 600;
+            color: #495057;
+        }
+        .required:after {
+            content: " *";
+            color: #dc3545;
+        }
+        .form-control:focus {
+            border-color: #0d6efd;
+            box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+        }
+        .btn-cancel {
+            background: #6c757d;
+            color: white;
+            border: none;
+        }
+        .btn-cancel:hover {
+            background: #5a6268;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header id="header" class="header fixed-top d-flex align-items-center">
+        <div class="d-flex align-items-center justify-content-between">
+            <a href="index.html" class="logo d-flex align-items-center">
+                <img src="MMM_Traktor_servis.images/logoOrg.png" alt="" >
+                <span class="d-none d-lg-block" style="font-size: 21px; font-weight: 700; color: navy;">MEXANIZATORLAR MAKTABI</span>
+            </a>
+            <i class="bi bi-list toggle-sidebar-btn"></i>
+        </div>
+
+        <nav class="header-nav ms-auto">
+            <ul class="d-flex align-items-center">
+                <li class="nav-item dropdown pe-3">
+                    <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
+                        <img src="MMM_Traktor_servis.images/Без названия.jpg" alt="Profile" class="rounded-circle">
+                        <span class="d-none d-md-block dropdown-toggle ps-2">Administrator</span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
+                        <li>
+                            <button onclick="logout()" class="btn btn-sm btn-outline-dark m-3">
+                                Tizimdan chiqish <i class="bi bi-box-arrow-right"></i>
+                            </button>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </nav>
+    </header>
+
+    <aside id="sidebar" class="sidebar" style="background-color: #cff4fc;">
+        <ul class="sidebar-nav" id="sidebar-nav">
+            <li class="nav-item">
+                <a class="nav-link" href="index.html">
+                    <i class="bi bi-grid" style="font-size: 22px;"></i>
+                    <span>Bosh sahifa</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link collapsed" data-bs-target="#users-nav" data-bs-toggle="collapse" href="#">
+                    <i class="bi bi-people" style="font-size: 22px;"></i><span>O'quvchilar</span><i class="bi bi-chevron-down ms-auto"></i>
+                </a>
+                <ul id="users-nav" class="nav-content collapse show" data-bs-parent="#sidebar-nav">
+                    <li>
+                        <a href="students-list.html">
+                            <i style="font-size: 20px;" class="bi bi-list-check"></i><span>Ro'yxatni ko'rish</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="students-add.html" class="active">
+                            <i style="font-size: 20px;" class="bi bi-plus-circle"></i><span>Yangi yaratish</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link collapsed" data-bs-target="#exams-nav" data-bs-toggle="collapse" href="#">
+                    <i class="bi bi-file-earmark-pdf" style="font-size: 22px;"></i><span>Guvohnomalar</span><i class="bi bi-chevron-down ms-auto"></i>
+                </a>
+                <ul id="exams-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
+                    <li>
+                        <a href="Guvohnomalar-list.html">
+                            <i style="font-size: 20px;" class="bi bi-list-check"></i><span>Ro'yxatni ko'rish</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="Guvohnomalar-add.html">
+                            <i style="font-size: 20px;" class="bi bi-plus-circle"></i><span>Yangi yaratish</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link collapsed" data-bs-target="#invoices-nav" data-bs-toggle="collapse" href="#">
+                    <i class="bi bi-cash" style="font-size: 22px;"></i><span>Invoyislar</span><i class="bi bi-chevron-down ms-auto"></i>
+                </a>
+                <ul id="invoices-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
+                    <li>
+                        <a href="invoices-list.html">
+                            <i style="font-size: 20px;" class="bi bi-list-check"></i><span>Ro'yxatni ko'rish</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="invoices-add.html">
+                            <i style="font-size: 20px;" class="bi bi-plus-circle"></i><span>Yangi yaratish</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </aside>
+
+    <main id="main" class="main">
+        <div class="p-4">
+            <div class="row mb-4">
+                <div class="col-12">
+                    <h2 style="font-weight: 700; color: darkblue; text-shadow: 0 0 2px red;">
+                        <i class="bi bi-person-plus me-2"></i>Yangi O'quvchi Qo'shish
+                    </h2>
+                    <p class="text-muted">
+                        Yangi o'quvchi ma'lumotlarini to'ldiring
+                    </p>
+                </div>
+            </div>
+
+            <!-- Форма -->
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <div class="form-card">
+                        <div class="form-header">
+                            <h4 class="mb-0">
+                                <i class="bi bi-person-badge me-2"></i>
+                                O'quvchi Ma'lumotlari
+                            </h4>
+                        </div>
+
+                        <form id="addStudentForm">
+                            <div class="row">
+                                <!-- JShShIR -->
+                                <div class="col-md-6 mb-3">
+                                    <label for="stJshshir" class="form-label required">
+                                        <i class="bi bi-card-text me-2"></i>JShShIR
+                                    </label>
+                                    <input type="text" 
+                                           class="form-control" 
+                                           id="stJshshir" 
+                                           placeholder="Masalan: 12345678901234" 
+                                           maxlength="14"
+                                           pattern="[0-9]{14}"
+                                           required
+                                           title="14 raqam kiriting">
+                                    <div class="form-text">
+                                        <i class="bi bi-info-circle me-1"></i>
+                                        O'quvchining 14 raqamli shaxsiy identifikatori
+                                    </div>
+                                </div>
+
+                                <!-- Tug'ilgan sana -->
+                                <div class="col-md-6 mb-3">
+                                    <label for="stBirth" class="form-label required">
+                                        <i class="bi bi-calendar-date me-2"></i>Tug'ilgan Sana
+                                    </label>
+                                    <input type="date" 
+                                           class="form-control" 
+                                           id="stBirth" 
+                                           required>
+                                    <div class="form-text">
+                                        <i class="bi bi-info-circle me-1"></i>
+                                        O'quvchining tug'ilgan sanasi
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- To'liq ismi -->
+                            <div class="mb-3">
+                                <label for="stName" class="form-label required">
+                                    <i class="bi bi-person-vcard me-2"></i>To'liq Ismi
+                                </label>
+                                <input type="text" 
+                                       class="form-control" 
+                                       id="stName" 
+                                       placeholder="Familiya Ism Otasining ismi" 
+                                       required>
+                                <div class="form-text">
+                                    <i class="bi bi-info-circle me-1"></i>
+                                    Familiya, Ism, Otasining ismi to'liq shaklda
+                                </div>
+                            </div>
+
+                            <!-- Telefon raqami -->
+                            <div class="mb-4">
+                                <label for="stPhone" class="form-label">
+                                    <i class="bi bi-telephone me-2"></i>Telefon Raqami
+                                </label>
+                                <div class="input-group">
+                                    <span class="input-group-text">+998</span>
+                                    <input type="tel" 
+                                           class="form-control" 
+                                           id="stPhone" 
+                                           placeholder="XX XXX-XX-XX"
+                                           
+                                           title="9 raqam kiriting">
+                                </div>
+                                <div class="form-text">
+                                    <i class="bi bi-info-circle me-1"></i>
+                                    Masalan: 90 123-45-67
+                                </div>
+                            </div>
+
+                            <hr class="my-4">
+
+                            <!-- Кнопки -->
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <a href="students-list.html" class="btn btn-cancel">
+                                        <i class="bi bi-arrow-left me-2"></i>Orqaga
+                                    </a>
+                                </div>
+                                <div>
+                                    <button type="reset" class="btn btn-secondary me-2">
+                                        <i class="bi bi-eraser me-2"></i>Tozalash
+                                    </button>
+                                    <button type="submit" class="btn btn-success">
+                                        <i class="bi bi-check-circle me-2"></i>Saqlash
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Информационная панель -->
+                    <div class="row mt-4">
+                        <div class="col-12">
+                            <div class="alert alert-info">
+                                <h5><i class="bi bi-lightbulb me-2"></i>Qo'llanma:</h5>
+                                <ul class="mb-0">
+                                    <li>Barcha maydonlarni to'g'ri to'ldiring</li>
+                                    <li>JShShIR 14 raqamdan iborat bo'lishi kerak</li>
+                                    <li>Telefon raqami ixtiyoriy, lekin tavsiya etiladi</li>
+                                    <li>Ma'lumotlarni saqlagach, ro'yxatga o'tasiz</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer id="footer" class="footer">
+        <div class="copyright">
+            &copy; Copyright <strong><span>2026 yil</span></strong>. Barcha huquqlar himoyalangan
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="students.js"></script>
+
+    <script>
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('addStudentForm');
+    
+    // Форматирование телефона
+    const phoneInput = document.getElementById('stPhone');
+    phoneInput.addEventListener('input', function(e) {
+        let value = e.target.value.replace(/\D/g, '');
+        if (value.length > 9) value = value.substring(0, 9);
+        
+        let formatted = '';
+        if (value.length > 0) {
+            formatted = value.substring(0, 2);
+            if (value.length > 2) {
+                formatted += ' ' + value.substring(2, 5);
+            }
+            if (value.length > 5) {
+                formatted += '-' + value.substring(5, 7);
+            }
+            if (value.length > 7) {
+                formatted += '-' + value.substring(7, 9);
+            }
+        }
+        e.target.value = formatted;
+    });
+
+    // Валидация JShShIR
+    const jshshirInput = document.getElementById('stJshshir');
+    jshshirInput.addEventListener('input', function(e) {
+        e.target.value = e.target.value.replace(/\D/g, '').substring(0, 14);
+    });
+
+    // Отправка формы
+    form.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        if (!form.checkValidity()) {
+            alert('Iltimos, barcha majburiy maydonlarni to‘ldiring!');
+            return;
+        }
+
+        // Сбор данных
+        const studentData = {
+            jshshir: jshshirInput.value.trim(),
+            full_name: document.getElementById('stName').value.trim(),
+            birth_date: document.getElementById('stBirth').value,
+            phone: phoneInput.value ? '+998' + phoneInput.value.replace(/\D/g, '') : ''
+        };
+
+        // Валидация JShShIR
+        if (studentData.jshshir.length !== 14) {
+            alert('JShShIR 14 raqamdan iborat bo‘lishi kerak!');
+            return;
+        }
+
+        // Валидация даты
+        const birthDate = new Date(studentData.birth_date);
+        const today = new Date();
+        if (birthDate >= today) {
+            alert('Tug‘ilgan sana bugungi kundan oldin bo‘lishi kerak!');
+            return;
+        }
+
+        try {
+            // Показываем loading
+            const submitBtn = form.querySelector('button[type="submit"]');
+            const originalText = submitBtn.innerHTML;
+            submitBtn.innerHTML = '<i class="bi bi-hourglass-split me-2"></i>Saqlanmoqda...';
+            submitBtn.disabled = true;
+
+            // Отправка на сервер
+            const response = await fetch('http://localhost:8080/api/students', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(studentData)
+            });
+
+            const result = await response.json();
+
+            if (response.ok) {
+                // Успех
+                alert('O‘quvchi muvaffaqiyatli qo‘shildi!');
+                form.reset();
+                
+                // Перенаправление через 2 секунды
+                setTimeout(() => {
+                    window.location.href = 'students-list.html';
+                }, 2000);
+            } else {
+                // Ошибка от сервера
+                alert('Xatolik: ' + (result.error || 'Noma\'lum xatolik'));
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            alert('Server bilan bog‘lanishda xatolik. Iltimos, qayta urinib ko‘ring.');
+        } finally {
+            // Восстанавливаем кнопку
+            const submitBtn = form.querySelector('button[type="submit"]');
+            submitBtn.innerHTML = '<i class="bi bi-check-circle me-2"></i>Saqlash';
+            submitBtn.disabled = false;
+        }
+    });
+
+    // Валидация даты (нельзя выбрать будущую)
+    const birthInput = document.getElementById('stBirth');
+    const today = new Date().toISOString().split('T')[0];
+    birthInput.max = today;
+
+    // Валидация при вводе имени (только буквы и пробелы)
+    const nameInput = document.getElementById('stName');
+    nameInput.addEventListener('input', function(e) {
+        // Разрешаем буквы, пробелы и апостроф
+        e.target.value = e.target.value.replace(/[^a-zA-Zа-яА-ЯёЁ'\- ]/g, '');
+    });
+});
+</script>
+    
+</html>

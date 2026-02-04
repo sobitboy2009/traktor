@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="uz">
+
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>Guvohnomalar Ro'yxati - MMM TRAKTOR SERVIS</title>
+
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    
+    <link rel="stylesheet" href="index.css">
+    <style>
+        .filter-card {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .table th {
+            background: linear-gradient(135deg, #0d6efd 0%, #0a58ca 100%);
+            color: white;
+            border: none;
+            padding: 15px;
+        }
+        .table td {
+            padding: 15px;
+            vertical-align: middle;
+        }
+        .badge-certificate {
+            background: linear-gradient(135deg, #28a745 0%, #1e7e34 100%);
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-weight: 500;
+        }
+        .btn-action {
+            padding: 5px 12px;
+            border-radius: 5px;
+            margin: 0 2px;
+        }
+        .pagination .page-link {
+            color: #0d6efd;
+        }
+        .pagination .page-item.active .page-link {
+            background: #0d6efd;
+            border-color: #0d6efd;
+        }
+        .stat-card {
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+            box-shadow: 0 0 5px rgba(0,0,0,0.1);
+            height: 100%;
+        }
+        .stat-icon {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header id="header" class="header fixed-top d-flex align-items-center">
+        <div class="d-flex align-items-center justify-content-between">
+            <a href="index.html" class="logo d-flex align-items-center">
+                <img src="MMM_Traktor_servis.images/logoOrg.png" alt="" >
+                <span class="d-none d-lg-block" style="font-size: 21px; font-weight: 700; color: navy;">MEXANIZATORLAR MAKTABI</span>
+            </a>
+            <i class="bi bi-list toggle-sidebar-btn"></i>
+        </div>
+
+        <nav class="header-nav ms-auto">
+            <ul class="d-flex align-items-center">
+                <li class="nav-item dropdown pe-3">
+                    <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
+                        <img src="MMM_Traktor_servis.images/Без названия.jpg" alt="Profile" class="rounded-circle">
+                        <span class="d-none d-md-block dropdown-toggle ps-2">Administrator</span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
+                        <li>
+                            <button onclick="logout()" class="btn btn-sm btn-outline-dark m-3">
+                                Tizimdan chiqish <i class="bi bi-box-arrow-right"></i>
+                            </button>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </nav>
+    </header>
+
+    <aside id="sidebar" class="sidebar" style="background-color: #cff4fc;">
+        <ul class="sidebar-nav" id="sidebar-nav">
+            <li class="nav-item">
+                <a class="nav-link" href="index.html">
+                    <i class="bi bi-grid" style="font-size: 22px;"></i>
+                    <span>Bosh sahifa</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link collapsed" data-bs-target="#users-nav" data-bs-toggle="collapse" href="#">
+                    <i class="bi bi-people" style="font-size: 22px;"></i><span>O'quvchilar</span><i class="bi bi-chevron-down ms-auto"></i>
+                </a>
+                <ul id="users-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
+                    <li>
+                        <a href="students-list.html">
+                            <i style="font-size: 20px;" class="bi bi-list-check"></i><span>Ro'yxatni ko'rish</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="students-add.html">
+                            <i style="font-size: 20px;" class="bi bi-plus-circle"></i><span>Yangi yaratish</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link collapsed" data-bs-target="#exams-nav" data-bs-toggle="collapse" href="#">
+                    <i class="bi bi-file-earmark-pdf" style="font-size: 22px;"></i><span>Guvohnomalar</span><i class="bi bi-chevron-down ms-auto"></i>
+                </a>
+                <ul id="exams-nav" class="nav-content collapse show" data-bs-parent="#sidebar-nav">
+                    <li>
+                        <a href="Guvohnomalar-list.html" class="active">
+                            <i style="font-size: 20px;" class="bi bi-list-check"></i><span>Ro'yxatni ko'rish</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="Guvohnomalar-add.html">
+                            <i style="font-size: 20px;" class="bi bi-plus-circle"></i><span>Yangi yaratish</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link collapsed" data-bs-target="#invoices-nav" data-bs-toggle="collapse" href="#">
+                    <i class="bi bi-cash" style="font-size: 22px;"></i><span>Invoyislar</span><i class="bi bi-chevron-down ms-auto"></i>
+                </a>
+                <ul id="invoices-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
+                    <li>
+                        <a href="invoices-list.html">
+                            <i style="font-size: 20px;" class="bi bi-list-check"></i><span>Ro'yxatni ko'rish</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="invoices-add.html">
+                            <i style="font-size: 20px;" class="bi bi-plus-circle"></i><span>Yangi yaratish</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </aside>
+
+    <main id="main" class="main">
+        <div class="p-4">
+            <div class="row mb-4">
+                <div class="col-12">
+                    <h2 style="font-weight: 700; color: darkblue; text-shadow: 0 0 2px red;">
+                        <i class="bi bi-file-earmark-text me-2"></i>Guvohnomalar Ro'yxati
+                    </h2>
+                    <p class="text-muted">
+                        Barcha berilgan guvohnomalar
+                    </p>
+                </div>
+            </div>
+
+            <!-- Статистика -->
+            <div class="row mb-4">
+                <div class="col-lg-3 col-md-6 mb-3">
+                    <div class="stat-card">
+                        <div class="stat-icon text-primary">
+                            <i class="bi bi-file-earmark-check"></i>
+                        </div>
+                        <h3 id="totalCertificates">0</h3>
+                        <p class="text-muted mb-0">Jami Guvohnomalar</p>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-3">
+                    <div class="stat-card">
+                        <div class="stat-icon text-success">
+                            <i class="bi bi-calendar-check"></i>
+                        </div>
+                        <h3 id="thisMonth">0</h3>
+                        <p class="text-muted mb-0">Bu Oy Berilgan</p>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-3">
+                    <div class="stat-card">
+                        <div class="stat-icon text-warning">
+                            <i class="bi bi-people"></i>
+                        </div>
+                        <h3 id="withCertificate">0</h3>
+                        <p class="text-muted mb-0">Guvohnomasi Bor</p>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-3">
+                    <div class="stat-card">
+                        <div class="stat-icon text-info">
+                            <i class="bi bi-printer"></i>
+                        </div>
+                        <h3 id="printedToday">0</h3>
+                        <p class="text-muted mb-0">Bugun Chop Etilgan</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Фильтры -->
+            <div class="filter-card">
+                <div class="row align-items-center">
+                    <div class="col-md-4 mb-2">
+                        <div class="input-group">
+                            <input type="text" 
+                                   class="form-control" 
+                                   id="searchInput" 
+                                   placeholder="Guvohnoma raqami, egasi yoki JShShIR bo'yicha qidirish...">
+                            <button class="btn btn-primary" type="button" id="searchButton">
+                                <i class="bi bi-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-2">
+                        <select class="form-select" id="categoryFilter">
+                            <option value="">Barcha toifalar</option>
+                            <option value="A">A toifasi</option>
+                            <option value="B">B toifasi</option>
+                            <option value="C">C toifasi</option>
+                            <option value="D">D toifasi</option>
+                            <option value="E">E toifasi</option>
+                            <option value="F">F toifasi</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3 mb-2">
+                        <input type="date" class="form-control" id="dateFilter">
+                    </div>
+                    <div class="col-md-2 mb-2 text-end">
+                        <a href="Guvohnomalar-add.html" class="btn btn-success">
+                            <i class="bi bi-plus-circle me-2"></i>Yangi
+                        </a>
+                        <button onclick="loadDocuments()" class="btn btn-warning ms-2">
+
+                            <i class="bi bi-arrow-clockwise"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Таблица -->
+            <div class="card">
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th style="width: 50px;">#</th>
+                                    <th>Guvohnoma Raqami</th>
+                                    <th>Talaba</th>
+                                    <th>JShShIR</th>
+                                    <th>Toifalar</th>
+                                    <th>Berilgan Sana</th>
+                                    <th>Imtihon Sana</th>
+                                    <th class="text-center" style="width: 180px;">Harakatlar</th>
+                                </tr>
+                            </thead>
+                            <tbody id="certificates-table-body">
+                                <!-- Данные загружаются через JS -->
+                                <tr>
+                                    <td colspan="8" class="text-center py-5">
+                                        <div class="spinner-border text-primary" role="status">
+                                            <span class="visually-hidden">Yuklanmoqda...</span>
+                                        </div>
+                                        <p class="mt-2 text-muted">Guvohnomalar yuklanmoqda...</p>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Информация о количестве -->
+                    <div class="row mt-4">
+                        <div class="col-md-6">
+                            <div class="alert alert-info mb-0">
+                                <i class="bi bi-info-circle me-2"></i>
+                                Jami: <span id="totalCount" class="badge bg-info">0</span> ta guvohnoma
+                            </div>
+                        </div>
+                        <div class="col-md-6 text-end">
+                            <div class="btn-group">
+                                <button class="btn btn-outline-secondary btn-sm" onclick="exportToExcel()">
+                                    <i class="bi bi-file-excel me-1"></i> Excel
+                                </button>
+                                <button class="btn btn-outline-secondary btn-sm" onclick="exportToPDF()">
+                                    <i class="bi bi-file-pdf me-1"></i> PDF
+                                </button>
+                                <button class="btn btn-outline-secondary btn-sm" onclick="printTable()">
+                                    <i class="bi bi-printer me-1"></i> Print
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div class="modal fade" id="certificateModal" tabindex="-1">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content">
+
+      <div class="modal-header bg-primary text-white">
+        <h5 class="modal-title" id="certTitle"></h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+
+      <div class="modal-body row">
+        <div class="col-md-7">
+          <p><b>Talaba:</b> <span id="certStudent"></span></p>
+          <p><b>JShShIR:</b> <span id="certJshshir"></span></p>
+          <p><b>Category:</b> <span id="certCategory"></span></p>
+          <p><b>Kurs:</b> <span id="certDates"></span></p>
+          <p><b>Imtihon:</b> <span id="certExam"></span></p>
+          <p><b>Soatlar:</b> <span id="certHours"></span></p>
+          <p><b>Baholar:</b> <span id="certGrades"></span></p>
+          <p><b>Guvohnoma №:</b> <span id="certNumber"></span></p>
+        </div>
+
+        <div class="col-md-5 text-center">
+          <h6>QR Code</h6>
+          <div id="qrBox"></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+
+
+    <footer id="footer" class="footer">
+        <div class="copyright">
+            &copy; Copyright <strong><span>2026 yil</span></strong>. Barcha huquqlar himoyalangan
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+
+    <script src="documents.js"></script>
+    <script>
+        // Только базовая инициализация
+        function logout() {
+            if (confirm("Tizimdan chiqishni xohlaysizmi?")) {
+                window.location.href = "index.html";
+            }
+        }
+
+        
+
+        // Простые функции для HTML
+        function exportToExcel() {
+            alert('Excel formatida eksport qilish - bu funksiya keyinroq qo\'shiladi');
+        }
+
+        function exportToPDF() {
+            alert('PDF formatida eksport qilish - bu funksiya keyinroq qo\'shiladi');
+        }
+
+        function printTable() {
+            window.print();
+        }
+
+        // Поиск по таблице
+        document.getElementById('searchButton')?.addEventListener('click', function() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const rows = document.querySelectorAll('#certificates-table-body tr');
+            
+            rows.forEach(row => {
+                const text = row.textContent.toLowerCase();
+                if (text.includes(searchTerm)) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
