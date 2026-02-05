@@ -4,7 +4,7 @@ const API_BASE = "/api";
 // Загрузка всех документов
 async function loadDocuments() {
     try {
-        const response = await fetch(`${API_URL}/documents`);
+        const response = await fetch(`/api/documents`);
         if (!response.ok) {
             const errorText = await response.text();
             throw new Error(`Server error: ${response.status} - ${errorText}`);
@@ -440,5 +440,6 @@ window.viewCertificate = viewCertificate;
 window.editCertificate = editCertificate;
 window.printCertificate = printCertificate;
 window.showQR = showQR;
+
 
 
