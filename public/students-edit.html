@@ -158,7 +158,7 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('editJshshirDisplay').textContent = jshshir;
     
     // Загружаем данные студента
-    fetch(`http://localhost:8080/api/students/${jshshir}`)
+    fetch(`/api/students/${jshshir}`)
         .then(response => {
             if (!response.ok) {
                 throw new Error('Talaba topilmadi');
@@ -235,4 +235,5 @@ document.addEventListener('DOMContentLoaded', function() {
 </script>
 
 </body>
+
 </html>
