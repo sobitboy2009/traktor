@@ -559,7 +559,7 @@
         studentNameInput.style.color = '#6c757d';
 
         try {
-            const response = await fetch(`http://localhost:8080/api/students/${jshshir}`);
+            const response = await fetch(`/api/students/${jshshir}`);
             
             if (!response.ok) {
                 throw new Error('Talaba topilmadi');
@@ -599,4 +599,5 @@
     });
 </script>
 </body>
+
 </html>
