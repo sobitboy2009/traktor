@@ -180,19 +180,9 @@ document.addEventListener('DOMContentLoaded', function() {
     handleResponsiveSidebar();
     window.addEventListener('resize', handleResponsiveSidebar);
     
-    // Получение данных для счетчиков (если нужно)
-    fetchCounts();
-});
+    
 
-// Функция для получения данных счетчиков (замените на ваши реальные API вызовы)
-function fetchCounts() {
-    // Пример реализации - замените на ваши реальные запросы
-    setTimeout(() => {
-        document.getElementById('usersCount').textContent = '15';
-        document.getElementById('studentsCount').textContent = '120';
-        document.getElementById('documentsCount').textContent = '85';
-    }, 500);
-}
+
 
 
 
