@@ -136,7 +136,7 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
     }
 
-    fetch(`http://localhost:8080/api/students/${jshshir}`)
+    fetch(`/api/students/${jshshir}`)
         .then(res => {
             if (!res.ok) throw new Error("Not found");
             return res.json();
@@ -164,3 +164,4 @@ document.addEventListener("DOMContentLoaded", () => {
 
 </body>
 </html>
+
