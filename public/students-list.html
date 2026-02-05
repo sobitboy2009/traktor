@@ -162,7 +162,7 @@ Jami: <span id="totalStudents">0</span> ta o'quvchi
 document.addEventListener("DOMContentLoaded", loadStudents);
 
 function loadStudents() {
-    fetch("http://localhost:8080/api/students")
+    fetch("/api/students")
         .then(res => res.json())
         .then(students => {
             const tbody = document.getElementById("students-table-body");
@@ -207,3 +207,4 @@ function deleteStudent(jshshir) {
 
 </body>
 </html>
+
