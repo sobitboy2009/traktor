@@ -723,7 +723,7 @@ function populateEditForm(doc) {
             studentNameInput.style.color = '#6c757d';
 
             try {
-                const response = await fetch(`http://localhost:8080/api/students/${jshshir}`);
+                const response = await fetch(`/api/students/${jshshir}`);
                 
                 if (!response.ok) {
                     throw new Error('Talaba topilmadi');
@@ -825,7 +825,7 @@ async function updateDocument(event) {
     try {
         showLoading(true);
         
-        const response = await fetch(`http://localhost:8080/api/documents/${currentDocumentId}`, {
+        const response = await fetch(`/api/documents/${currentDocumentId}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -868,7 +868,7 @@ async function updateDocument(event) {
         try {
             showLoading(true);
             
-            const response = await fetch(`http://localhost:8080/api/documents/${currentDocumentId}`, {
+            const response = await fetch(`/api/documents/${currentDocumentId}`, {
                 method: "DELETE"
             });
 
@@ -1016,4 +1016,5 @@ async function updateDocument(event) {
 </body>
 
 </html>
+
 
