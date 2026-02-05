@@ -703,7 +703,7 @@
                 console.log('Получено инвойсов:', invoices.length);
                 displayInvoices(invoices);
             } catch (error) {
-                console.error('Xatolik:', error);
+                console.log('Xatolik:', error);
                 showError(`Ma'lumotlarni yuklashda xatolik: ${error.message}`);
             } finally {
                 showLoading(false);
@@ -1186,3 +1186,4 @@
 </body>
 
 </html>
+
