@@ -249,7 +249,7 @@ async function addDocument(event) {
     console.log('Sending document data:', documentData);
     
     try {
-        const response = await fetch(`${API_URL}/documents`, {
+        const response = await fetch(`/api/documents`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -293,7 +293,7 @@ async function deleteCertificate(id) {
     }
 
     try {
-        const response = await fetch(`${API_URL}/documents/${id}`, {
+        const response = await fetch(/api/documents/${id}`, {
             method: "DELETE"
         });
 
@@ -440,6 +440,7 @@ window.viewCertificate = viewCertificate;
 window.editCertificate = editCertificate;
 window.printCertificate = printCertificate;
 window.showQR = showQR;
+
 
 
 
