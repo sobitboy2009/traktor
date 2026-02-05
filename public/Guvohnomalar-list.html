@@ -391,6 +391,52 @@
                 }
             });
         });
+
+        document.addEventListener('DOMContentLoaded', function() {
+    const toggleSidebarBtn = document.querySelector('.toggle-sidebar-btn');
+    const sidebar = document.getElementById('sidebar');
+    const body = document.body;
+    
+    if (toggleSidebarBtn && sidebar) {
+        toggleSidebarBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            body.classList.toggle('toggle-sidebar');
+            
+            // Также можно добавить/удалить класс непосредственно к сайдбару
+            sidebar.classList.toggle('collapsed');
+            
+            // Сохраняем состояние в localStorage
+            if (body.classList.contains('toggle-sidebar')) {
+                localStorage.setItem('sidebarCollapsed', 'true');
+            } else {
+                localStorage.setItem('sidebarCollapsed', 'false');
+            }
+        });
+        
+        // Восстанавливаем состояние сайдбара при загрузке
+        if (localStorage.getItem('sidebarCollapsed') === 'true') {
+            body.classList.add('toggle-sidebar');
+            sidebar.classList.add('collapsed');
+        }
+    }
+    
+    // Добавьте также этот код для автоматического сворачивания сайдбара на мобильных устройствах
+    function handleResponsiveSidebar() {
+        if (window.innerWidth <= 768) {
+            body.classList.add('toggle-sidebar');
+            sidebar.classList.add('collapsed');
+        } else {
+            // На десктопе восстанавливаем сохраненное состояние
+            if (localStorage.getItem('sidebarCollapsed') !== 'true') {
+                body.classList.remove('toggle-sidebar');
+                sidebar.classList.remove('collapsed');
+            }
+        }
+    }
+    
+    
+});
     </script>
 </body>
+
 </html>
