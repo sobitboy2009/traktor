@@ -1,5 +1,5 @@
 // documents.js - Управление guvohnomalar (документами)
-const API_URL = 'http://localhost:8080/api';
+const API_BASE = "/api";
 
 // Загрузка всех документов
 async function loadDocuments() {
@@ -440,3 +440,4 @@ window.viewCertificate = viewCertificate;
 window.editCertificate = editCertificate;
 window.printCertificate = printCertificate;
 window.showQR = showQR;
+
