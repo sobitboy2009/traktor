@@ -119,7 +119,7 @@ function renderDocumentsTable(documents) {
 }
 
 // Укажи здесь публичный URL своего сервера (ngrok, VPS или хостинг)
-const PUBLIC_URL = 'https://abcd1234.ngrok.io'; // <- замени на свой публичный адрес
+const PUBLIC_URL = 'https://traktor-production.up.railway.app/'; // <- замени на свой публичный адрес
 
 function showQR(certNumber) {
     // Генерируем публичный URL для проверки сертификата
@@ -440,4 +440,5 @@ window.viewCertificate = viewCertificate;
 window.editCertificate = editCertificate;
 window.printCertificate = printCertificate;
 window.showQR = showQR;
+
 
