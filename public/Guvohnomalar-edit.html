@@ -590,7 +590,7 @@
     
     try {
         console.log('Loading document with ID:', currentDocumentId);
-        const response = await fetch(`http://localhost:8080/api/documents/${currentDocumentId}`);
+        const response = await fetch(`/api/documents/${currentDocumentId}`);
         
         if (!response.ok) {
             throw new Error(`HTTP ${response.status}`);
@@ -968,4 +968,5 @@ async function updateDocument(event) {
     });
 </script>
 </body>
+
 </html>
