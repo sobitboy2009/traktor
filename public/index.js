@@ -133,7 +133,67 @@ window.API = {
 
  
 
-//  LOGIN
+// Обработка клика по бургер-меню для показа/скрытия сайдбара
+document.addEventListener('DOMContentLoaded', function() {
+    const toggleSidebarBtn = document.querySelector('.toggle-sidebar-btn');
+    const sidebar = document.getElementById('sidebar');
+    const body = document.body;
+    
+    if (toggleSidebarBtn && sidebar) {
+        toggleSidebarBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            body.classList.toggle('toggle-sidebar');
+            
+            // Также можно добавить/удалить класс непосредственно к сайдбару
+            sidebar.classList.toggle('collapsed');
+            
+            // Сохраняем состояние в localStorage
+            if (body.classList.contains('toggle-sidebar')) {
+                localStorage.setItem('sidebarCollapsed', 'true');
+            } else {
+                localStorage.setItem('sidebarCollapsed', 'false');
+            }
+        });
+        
+        // Восстанавливаем состояние сайдбара при загрузке
+        if (localStorage.getItem('sidebarCollapsed') === 'true') {
+            body.classList.add('toggle-sidebar');
+            sidebar.classList.add('collapsed');
+        }
+    }
+    
+    // Добавьте также этот код для автоматического сворачивания сайдбара на мобильных устройствах
+    function handleResponsiveSidebar() {
+        if (window.innerWidth <= 768) {
+            body.classList.add('toggle-sidebar');
+            sidebar.classList.add('collapsed');
+        } else {
+            // На десктопе восстанавливаем сохраненное состояние
+            if (localStorage.getItem('sidebarCollapsed') !== 'true') {
+                body.classList.remove('toggle-sidebar');
+                sidebar.classList.remove('collapsed');
+            }
+        }
+    }
+    
+    // Проверяем при загрузке и при изменении размера окна
+    handleResponsiveSidebar();
+    window.addEventListener('resize', handleResponsiveSidebar);
+    
+    // Получение данных для счетчиков (если нужно)
+    fetchCounts();
+});
+
+// Функция для получения данных счетчиков (замените на ваши реальные API вызовы)
+function fetchCounts() {
+    // Пример реализации - замените на ваши реальные запросы
+    setTimeout(() => {
+        document.getElementById('usersCount').textContent = '15';
+        document.getElementById('studentsCount').textContent = '120';
+        document.getElementById('documentsCount').textContent = '85';
+    }, 500);
+}
+
 
 
 
