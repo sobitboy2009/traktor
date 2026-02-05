@@ -1,5 +1,5 @@
 // students.js - Без alert, с фиксом кнопки
-const API_URL = 'http://localhost:8080/api';
+const API_BASE = "/api";
 
 
 // ===== TOAST УВЕДОМЛЕНИЯ =====
@@ -427,6 +427,7 @@ document.addEventListener('DOMContentLoaded', function() {
 // Экспорт функций
 window.deleteStudent = deleteStudent;
 window.loadStudents = loadStudents;
+
 
 
 
