@@ -199,7 +199,7 @@ function loadStudents() {
 function deleteStudent(jshshir) {
     if (!confirm("Rostdan ham o‘chirmoqchimisiz?")) return;
 
-    fetch(`http://localhost:8080/api/students/${jshshir}`, {
+    fetch(`/api/students/${jshshir}`, {
         method: "DELETE"
     }).then(() => loadStudents());
 }
@@ -207,4 +207,5 @@ function deleteStudent(jshshir) {
 
 </body>
 </html>
+
 
