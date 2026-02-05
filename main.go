@@ -291,21 +291,29 @@ func studentGet(w http.ResponseWriter, r *http.Request) {
 
 func studentCreate(w http.ResponseWriter, r *http.Request) {
 	var s Student
-	json.NewDecoder(r.Body).Decode(&s)
 
-	_, err := db.Exec(`
+	err := json.NewDecoder(r.Body).Decode(&s)
+	if err != nil {
+		log.Println("❌ JSON decode error:", err)
+		http.Error(w, "Invalid JSON", http.StatusBadRequest)
+		return
+	}
+
+	_, err = db.Exec(`
 		INSERT INTO students (jshshir, full_name, birth_date, phone)
-		VALUES ($1,$2,$3,$4)`,
-		s.JSHSHIR, s.FullName, s.BirthDate, s.Phone,
-	)
+		VALUES ($1,$2,$3,$4)
+	`, s.JSHSHIR, s.FullName, s.BirthDate, s.Phone)
 
 	if err != nil {
+		log.Println("❌ INSERT student error:", err)
 		http.Error(w, err.Error(), 500)
 		return
 	}
 
+	w.WriteHeader(http.StatusCreated)
 	respondJSON(w, map[string]string{"status": "created"})
 }
+
 
 func studentUpdate(w http.ResponseWriter, r *http.Request) {
 	jshshir := mux.Vars(r)["jshshir"]
