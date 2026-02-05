@@ -360,7 +360,7 @@ document.addEventListener('DOMContentLoaded', function() {
             submitBtn.disabled = true;
 
             // Отправка на сервер
-            const response = await fetch('http://localhost:8080/api/students', {
+            const response = await fetch('/api/students', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -408,4 +408,5 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 </script>
     
+
 </html>
