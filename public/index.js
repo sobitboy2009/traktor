@@ -176,11 +176,9 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
     
-    // Проверяем при загрузке и при изменении размера окна
-    handleResponsiveSidebar();
-    window.addEventListener('resize', handleResponsiveSidebar);
+    });
     
-    
+
 
 
 
