@@ -293,7 +293,7 @@ async function deleteCertificate(id) {
     }
 
     try {
-        const response = await fetch(/api/documents/${id}`, {
+        const response = await fetch(`/api/documents/${id}`, {
             method: "DELETE"
         });
 
@@ -440,6 +440,7 @@ window.viewCertificate = viewCertificate;
 window.editCertificate = editCertificate;
 window.printCertificate = printCertificate;
 window.showQR = showQR;
+
 
 
 
