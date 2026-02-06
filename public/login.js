@@ -9,10 +9,11 @@ document.getElementById("btnLogin").addEventListener("click", function() {
     const errorDiv = document.getElementById("error");
 
     // Проверка логина и пароля
-    if (loginInput === "Sobitboy" && passwordInput === "2216") {
+    if (loginInput === "Anvar" && passwordInput === "1727") {
         localStorage.setItem("isAuth", "true"); // сохраняем сессию
         window.location.href = "index.html";
     } else {
         errorDiv.textContent = "Login yoki parol noto‘g‘ri";
     }
+
 });
