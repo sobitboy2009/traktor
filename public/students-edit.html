@@ -209,7 +209,7 @@ document.addEventListener('DOMContentLoaded', function() {
         
         console.log('Yangilash:', updatedStudent);
         
-        fetch(`http://localhost:8080/api/students/${jshshir}`, {
+        fetch(`/api/students/${jshshir}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json'
@@ -237,3 +237,4 @@ document.addEventListener('DOMContentLoaded', function() {
 </body>
 
 </html>
+
