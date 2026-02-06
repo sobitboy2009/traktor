@@ -1,5 +1,6 @@
 // students.js - Без alert, с фиксом кнопки
 const API_BASE = "/api";
+const API_URL = API_BASE;
 
 
 // ===== TOAST УВЕДОМЛЕНИЯ =====
@@ -427,6 +428,7 @@ document.addEventListener('DOMContentLoaded', function() {
 // Экспорт функций
 window.deleteStudent = deleteStudent;
 window.loadStudents = loadStudents;
+
 
 
 
