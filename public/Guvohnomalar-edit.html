@@ -649,17 +649,17 @@ function populateEditForm(doc) {
     if (statusElement) statusElement.value = doc.status || 'active';
     
     // ДОБАВЬТЕ: Имя директора (разделяем на имя и фамилию)
-    const directorName = doc.director_name || 'N. ILYASOVA';
+    const directorName = doc.director_name || 'Y Usmonova';
     const nameParts = directorName.split(' ');
     
     const directorNameElement = document.getElementById('editDirectorName');
     const directorSurnameElement = document.getElementById('editDirectorSurname');
     
     if (directorNameElement && nameParts.length > 0) {
-        directorNameElement.value = nameParts[0] || 'N.';
+        directorNameElement.value = nameParts[0] || 'Y';
     }
     if (directorSurnameElement && nameParts.length > 1) {
-        directorSurnameElement.value = nameParts.slice(1).join(' ') || 'ILYASOVA';
+        directorSurnameElement.value = nameParts.slice(1).join(' ') || 'Usmonova';
     }
     
     // Категории
@@ -817,7 +817,7 @@ async function updateDocument(event) {
         status: statusInput.value,
         // ДОБАВЬТЕ ЭТИ ПОЛЯ:
         commission_number: commissionNumberInput.value,
-        director_name: directorName || 'N. ILYASOVA'
+        director_name: directorName || 'Y Usmonova'
     };
     
     console.log('Updating document with ID:', currentDocumentId, 'Data:', documentData);
@@ -1016,5 +1016,6 @@ async function updateDocument(event) {
 </body>
 
 </html>
+
 
 
