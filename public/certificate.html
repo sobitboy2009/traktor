@@ -100,7 +100,7 @@
             text-align: left;
             font-size: 13px;
             font-weight: bold;
-            color: #1b8a8a;
+            color: #000C1F;
             line-height: 1.4;
         }
 
@@ -331,20 +331,14 @@
     }
 
     /* Базовый класс для всех фигур */
-    .shape {
-        position: absolute;
-        width: 0; height: 0;
-    }
-
-  
-    .top-dark {
+     .top-dark {
     position: absolute;
     
     width: 0; 
     height: 0;
     
    
-    border-top: 110px solid #002B3D; 
+    border-top: 110px solid #002366; 
     border-left: 70px solid transparent;
     border-right: 60px solid transparent;
     
@@ -356,13 +350,13 @@
     .top-green {
         border-top: 110px solid transparent;
         border-bottom: 0px solid transparent;
-        border-left: 70px solid #00A88E;
+        border-left: 70px solid #0047AB;
         top: 0; left: 0;
     }
 
     /* 3. Маленький зеленый перевернутый (ниже) */
     .mid-green-down {
-        border-top: 60px solid #00a88e;
+        border-top: 60px solid #003153;
         border-left: 40px solid transparent;
         border-right: 40px solid transparent;
         top: 160px; left: 0;
@@ -390,7 +384,7 @@
     width: 0;
     height: 0;
     
-    border-top: 60px solid #116558; 
+    border-top: 60px solid #062945; 
     border-right: 60px solid transparent;
     top: 340px; 
     left: 0;
@@ -400,7 +394,7 @@
     width: 0;
     height: 0;
     /* Меняем border-top на border-bottom для отражения по вертикали */
-    border-bottom: 100px solid #11584d; 
+    border-bottom: 100px solid #708090; 
     border-right: 100px solid transparent;
     
     top: 480px; 
@@ -411,7 +405,7 @@
     width: 0;
     height: 0;
     /* Убираем одну сторону, чтобы получить прямой угол */
-    border-top: 100px solid #002B3D; 
+    border-top: 100px solid #B0C4DE; 
     border-right: 100px solid transparent;
     top: 578px; 
     left: 0;
@@ -425,7 +419,7 @@
     }
 
     .bot-green-tri {
-        border-bottom: 100px solid #1b8a8a;
+        border-bottom: 100px solid #002147;
         border-right: 100px solid transparent;
         position: absolute; bottom: 0; left: 0;
     }
@@ -459,7 +453,7 @@
     .grey-grad0 {
     width: 70px; 
     height: 55px;
-    background: linear-gradient(135deg, transparent, #737679);
+    background: linear-gradient(160deg, transparent, #051356);
     bottom: 306px; 
     left: 36px;
     clip-path: polygon(50% 0, 0 100%, 100% 100%);
@@ -467,14 +461,14 @@
 }
     .grey-grad {
         width: 75px; height: 57px;
-        background: linear-gradient(135deg, #003344, #003344);
+        background: linear-gradient(135deg, #082567, #003344);
         bottom: 88px; left: 20px;
         clip-path: polygon(0 0, 100% 0, 50% 100%);
         z-index: 2;
     }
     .grey-grad2 {
         width: 70px; height: 45px;
-        background: linear-gradient(135deg, #9fa2a4, #68696b);
+        background: linear-gradient(135deg, #051356, #68696b);
         clip-path: polygon(50% 0%, 100% 100%, 0% 100%);
         bottom: 0; left: 101px;
         z-index: 0;
@@ -483,7 +477,7 @@
     position: absolute; 
     width: 110px; 
     height: 90px;
-    background: linear-gradient(135deg, #00A88E, #008a76); 
+    background: linear-gradient(135deg, #003D45, #051356); 
     bottom: 0; 
     left: -5px;
     clip-path: polygon(50% 0%, 100% 100%, 0% 100%);
@@ -503,7 +497,7 @@
 
     .teal-arrow2 {
         width: 70px; height: 58px;
-        background-color: #042125;
+        background-color: #6699CC;
         bottom: 88px; left: 57px;
         clip-path: polygon(0 100%, 100% 106%, 52% 0);
         z-index: 3;
@@ -511,7 +505,7 @@
 
     .teal-arrow3 {
         width: 90px; height: 70px;
-        background: linear-gradient(135deg, #042125, #1b5860); 
+        background: linear-gradient(135deg, #042125, #042125); 
         bottom: 150px; left: 88px;
         clip-path: polygon(0 100%, 100% 106%, 46% 0);
         z-index: 3;
@@ -521,9 +515,9 @@
     position: absolute; 
     width: 70px; 
     height: 60px;
-    background: linear-gradient(135deg, #00A88E, #1b5860); 
+    background: linear-gradient(135deg, #050A30, #1b5860); 
     bottom: 178px; 
-    left: 70px;
+    left: 50px;
     clip-path: polygon(0 0, 100% 0, 50% 100%);
     z-index: 3;
 }
@@ -531,7 +525,7 @@
     /* 5. Маленькая стрелочка справа внизу */
     .small-arrow {
         width: 60px; height: 34px;
-        background-color: #00a88e;
+        background-color: #050A30;
         bottom: 50px; left: 140px;
         clip-path: polygon(0 0, 100% 0, 50% 100%);
     }
@@ -544,7 +538,7 @@
     <nav class="navbar navbar-expand-lg navbar-custom">
         <div class="container">
             <a class="navbar-brand text-white" href="#">
-                <i class="bi bi-award"></i> MEXANIZATORLAR MAKTABI - Guvohnoma
+                <i class="bi bi-award"></i> MAXSUS TEXNIKA TALIM TEXNOLOGIYALARI - Guvohnoma
             </a>
             <button class="btn btn-return" onclick="window.history.back()">
                 <i class="bi bi-arrow-left"></i> Orqaga
@@ -611,7 +605,7 @@
 
         <div class="content">
             <div class="header-top">O'ZBEKISTON RESPUBLIKASI</div>
-            <div class="header-sub">"MEXANIZATORLAR MAKTABI" MCHJ</div>
+            <div class="header-sub">"MAXSUS TEXNIKA TALIM TEXNOLOGIYALARI " MCHJ</div>
             
             <div class="doc-title">GUVOHNOMA № <span id="certNumber">000000</span></div>
 
@@ -644,7 +638,7 @@
                 </div>
 
                 <div class="sign-area">
-                    <span class="sign-name" id="directorName">N ILYASOVA</span>
+                    <span class="sign-name" id="directorName">USMONOVA YULDUZ RUSTAMOVNA</span>
                     <span class="sign-desc">Ta'lim muassasasi rahbari</span>
                 </div>
             </div>
@@ -998,3 +992,4 @@ new QRCode(document.getElementById("qrCodeContainer"), {
 </body>
 
 </html>
+
