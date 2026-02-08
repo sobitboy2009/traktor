@@ -243,7 +243,7 @@ async function addDocument(event) {
         status: "active",
         // ИСПРАВЛЕНО: берем данные из формы
         commission_number: commissionNumber,  // Из поля с id="commissionNumber"
-        director_name: directorName || 'N. ILYASOVA'  // Объединенное имя и фамилия
+        director_name: directorName || 'Y. Usmonova'  // Объединенное имя и фамилия
     };
     
     console.log('Sending document data:', documentData);
@@ -440,6 +440,7 @@ window.viewCertificate = viewCertificate;
 window.editCertificate = editCertificate;
 window.printCertificate = printCertificate;
 window.showQR = showQR;
+
 
 
 
