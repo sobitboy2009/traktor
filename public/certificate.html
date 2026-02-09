@@ -331,7 +331,7 @@
     }
 
     /* Базовый класс для всех фигур */
-     .top-dark {
+    .top-dark {
     position: absolute;
     
     width: 0; 
@@ -356,22 +356,20 @@
 
     /* 3. Маленький зеленый перевернутый (ниже) */
     .mid-green-down {
-        border-top: 60px solid #003153;
-        border-left: 40px solid transparent;
-        border-right: 40px solid transparent;
-        top: 160px; left: 0;
+        background-color: #003153;
+        top: 160px; left: 10px;
+        width: 50px;
+        height: 50px;
         position: absolute;
         bottom: 0
     }
 
     .mid-green-down2 {
     position: absolute;
-    width: 0; 
-    height: 0;
-    /* Острый угол вверх: используем border-bottom вместо border-top */
-    border-bottom: 60px solid #002B3D; 
-    border-left: 40px solid transparent;
-    border-right: 40px solid transparent;
+    width: 50px; 
+    height: 60px;
+    background-color: #002B3D;
+   
     
     /* Позиционирование */
     top: 260px; 
@@ -381,29 +379,28 @@
     /* 4. Темный "клюв" слева */
     .mid-dark-left {
     position: absolute;
-    width: 0;
-    height: 0;
+    width: 60px;
+    height: 60px;
+    background-color: #062945;
     
-    border-top: 60px solid #062945; 
-    border-right: 60px solid transparent;
     top: 340px; 
-    left: 0;
+    left: 10px;
 }
     .mid-dark-left2 {
     position: absolute;
-    width: 0;
-    height: 0;
-    /* Меняем border-top на border-bottom для отражения по вертикали */
+    width: 50px;
+    height: 20px;
+    background-color: #fff;
     border-bottom: 100px solid #708090; 
-    border-right: 100px solid transparent;
+    
     
     top: 480px; 
     left: 0;
 }
     .mid-dark-left3 {
     position: absolute;
-    width: 0;
-    height: 0;
+    width: 60px;
+    height: 80px;
     /* Убираем одну сторону, чтобы получить прямой угол */
     border-top: 100px solid #B0C4DE; 
     border-right: 100px solid transparent;
@@ -456,20 +453,19 @@
     background: linear-gradient(160deg, transparent, #051356);
     bottom: 306px; 
     left: 36px;
-    clip-path: polygon(50% 0, 0 100%, 100% 100%);
+    
     z-index: 2;
 }
     .grey-grad {
         width: 75px; height: 57px;
         background: linear-gradient(135deg, #082567, #003344);
         bottom: 88px; left: 20px;
-        clip-path: polygon(0 0, 100% 0, 50% 100%);
         z-index: 2;
     }
     .grey-grad2 {
         width: 70px; height: 45px;
         background: linear-gradient(135deg, #051356, #68696b);
-        clip-path: polygon(50% 0%, 100% 100%, 0% 100%);
+        
         bottom: 0; left: 101px;
         z-index: 0;
     }
@@ -479,19 +475,18 @@
     height: 90px;
     background: linear-gradient(135deg, #003D45, #051356); 
     bottom: 0; 
-    left: -5px;
-    clip-path: polygon(50% 0%, 100% 100%, 0% 100%);
+    left: 15px;
+    
     
     z-index: 2;
 }
 
    
     .teal-arrow {
-        width: 60px; height: 57px;
+        width: 60px; height: 70px;
         background-color: #7a7e83;
         bottom: 88px;
-        left: 3px;
-        clip-path: polygon(0 100%, 90% 100%, 34% 0);
+        
         
     }
 
@@ -499,15 +494,16 @@
         width: 70px; height: 58px;
         background-color: #6699CC;
         bottom: 88px; left: 57px;
-        clip-path: polygon(0 100%, 100% 106%, 52% 0);
+        
         z-index: 3;
     }
 
     .teal-arrow3 {
-        width: 90px; height: 70px;
+        width: 50px; height: 50px;
         background: linear-gradient(135deg, #042125, #042125); 
         bottom: 150px; left: 88px;
-        clip-path: polygon(0 100%, 100% 106%, 46% 0);
+       
+        
         z-index: 3;
     }
 
@@ -518,16 +514,16 @@
     background: linear-gradient(135deg, #050A30, #1b5860); 
     bottom: 178px; 
     left: 50px;
-    clip-path: polygon(0 0, 100% 0, 50% 100%);
+   
     z-index: 3;
 }
 
     /* 5. Маленькая стрелочка справа внизу */
     .small-arrow {
-        width: 60px; height: 34px;
+        width: 60px; height: 44px;
         background-color: #050A30;
-        bottom: 50px; left: 140px;
-        clip-path: polygon(0 0, 100% 0, 50% 100%);
+        bottom: 20px; left: 140px;
+        
     }
     
 
@@ -992,6 +988,7 @@ new QRCode(document.getElementById("qrCodeContainer"), {
 </body>
 
 </html>
+
 
 
 
