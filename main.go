@@ -220,6 +220,8 @@ func getNextCertificateNumber() (string, error) {
 	return fmt.Sprintf("%04d", nextNum), nil
 }
 
+var BaseURL = "https://www.mttt-mexanizator.uz/" 
+
 func generateQRCode(data string) (string, error) {
 	qr, err := qrcode.New(data, qrcode.Medium)
 	if err != nil {
