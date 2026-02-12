@@ -221,7 +221,7 @@ func getNextCertificateNumber() (string, error) {
 	return fmt.Sprintf("%04d", nextNum), nil
 }
 
-var BaseURL = "https://www.mttt-mexanizator.uz/"
+var BaseURL = "https://www.mttt-mexanizator.uz"
 
 func generateQRCode(data string) (string, error) {
 	qr, err := qrcode.New(data, qrcode.Medium)
@@ -460,33 +460,16 @@ func documentDetails(w http.ResponseWriter, r *http.Request) {
 	)
 
 	if err != nil {
-		if err == sql.ErrNoRows {
-			http.Error(w, "Document not found", 404)
-		} else {
-			http.Error(w, err.Error(), 500)
-		}
+		http.Error(w, "Document not found", 404)
 		return
 	}
 
-	// ================= QR DATA =================
-	qrPayload := map[string]string{
-		"n": detail.CertificateNo,
-		"s": detail.StudentName,
-		"j": detail.StudentJSHSHIR,
-		"d": detail.ExamDate.Format("2006-01-02"),
-		"c": detail.Categories,
-		"st": detail.Status,
-	}
-
-	jsonBytes, err := json.Marshal(qrPayload)
-	if err != nil {
-		http.Error(w, "QR data error", 500)
-		return
-	}
-
-	encoded := url.QueryEscape(string(jsonBytes))
-
-	qrURL := BaseURL + "verify.html?data=" + encoded
+	// ===== QR: ТОЛЬКО ССЫЛКА =====
+	qrURL := fmt.Sprintf(
+		"%s/verify.html?id=%d",
+		BaseURL,
+		detail.ID,
+	)
 
 	qrBase64, err := generateQRCode(qrURL)
 	if err != nil {
@@ -495,10 +478,10 @@ func documentDetails(w http.ResponseWriter, r *http.Request) {
 	}
 
 	detail.QRCodeBase64 = qrBase64
-	// ==========================================
 
 	respondJSON(w, detail)
 }
+
 
 
 
