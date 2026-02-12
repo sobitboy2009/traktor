@@ -466,33 +466,10 @@ func documentDetails(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	
-	// ========== ГЕНЕРАЦИЯ QR-КОДА НА СЕРВЕРЕ ==========
-shortData := map[string]string{
-    "n": getStringValue(detail.CertificateNo),
-    "s": getStringValue(detail.StudentName),
-    "j": getStringValue(detail.StudentJSHSHIR),
-    "d": detail.ExamDate, // уже строка в формате DD.MM.YYYY
-}
-
-jsonBytes, _ := json.Marshal(shortData)
-// Заменяем ' на %27 — обязательно!
-encoded := url.QueryEscape(string(jsonBytes))
-encoded = strings.ReplaceAll(encoded, "'", "%27")
-
-qrURL := "/verify.html?data=" + encoded
-
-qrBase64, err := generateQRCode(qrURL)
-if err != nil {
-    log.Printf("❌ QR error: %v", err)
-    detail.QRCodeBase64 = ""
-} else {
-    detail.QRCodeBase64 = qrBase64
-}
-// ==================================================
+	detail.QRCodeBase64 = ""
 
     respondJSON(w, detail)
 }
-
 
 
 
