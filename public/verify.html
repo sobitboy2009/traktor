@@ -35,67 +35,76 @@
     </div>
 
     <script>
-        (function() {
-            const params = new URLSearchParams(window.location.search);
-            const dataParam = params.get('data');
+(function() {
+    const params = new URLSearchParams(window.location.search);
+    const dataParam = params.get('data');
 
-            function formatDate(dateString) {
-                if (!dateString) return 'N/A';
-                const date = new Date(dateString);
-                if (isNaN(date.getTime())) return dateString;
-                const day = date.getDate().toString().padStart(2, '0');
-                const month = (date.getMonth() + 1).toString().padStart(2, '0');
-                const year = date.getFullYear();
-                return `${day}.${month}.${year}`;
-            }
+    function formatDate(dateString) {
+        if (!dateString) return 'N/A';
+        const date = new Date(dateString);
+        if (isNaN(date.getTime())) return dateString;
+        const day = date.getDate().toString().padStart(2, '0');
+        const month = (date.getMonth() + 1).toString().padStart(2, '0');
+        const year = date.getFullYear();
+        return `${day}.${month}.${year}`;
+    }
 
-            function showCertificate(d) {
-                const statusClass = d.status === 'Tasdiqlangan' ? 'success' : 'warning';
-                document.getElementById('result').innerHTML = `
-                    <div class="alert alert-${statusClass}">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <h5 class="mb-0"><i class="bi bi-${statusClass === 'success' ? 'check-circle' : 'exclamation-triangle'}"></i> Guvohnoma ${d.status || 'Tasdiqlangan'}</h5>
-                            <span class="badge bg-${statusClass} status-badge">${d.status || 'Tasdiqlangan'}</span>
-                        </div>
-                    </div>
-                    <div class="info-item"><strong>Guvohnoma raqami:</strong><br><span class="fs-5">${d.certificate_number || 'N/A'}</span></div>
-                    <div class="info-item"><strong>Talaba:</strong><br><span class="fs-5">${d.student_name || 'N/A'}</span></div>
-                    <div class="info-item"><strong>JShShIR:</strong><br><code class="fs-5">${d.student_jshshir || 'N/A'}</code></div>
-                    <div class="row">
-                        <div class="col-md-6"><div class="info-item"><strong>Toifalar:</strong><br>${d.categories || 'N/A'}</div></div>
-                        <div class="col-md-6"><div class="info-item"><strong>Imtihon sanasi:</strong><br>${formatDate(d.exam_date)}</div></div>
-                    </div>
-                    <div class="info-item"><strong>Rahbar:</strong><br>${d.director_name || 'N. ILYASOVA'}</div>
-                    <div class="mt-4 text-center">
-                        <p class="text-muted"><small><i class="bi bi-info-circle"></i> "MMM TRAKTOR SERVIS" MCHJ</small></p>
-                        <p class="text-warning"><small><i class="bi bi-shield-lock"></i> Maʼlumotlar QR kod ichida tekshirildi</small></p>
-                    </div>
-                `;
-            }
+    function showCertificate(d) {
+        // Поддержка коротких ключей (n,s,j,d) и длинных
+        const certNumber = d.certificate_number || d.n || 'N/A';
+        const studentName = d.student_name || d.s || 'N/A';
+        const jshshir = d.student_jshshir || d.j || 'N/A';
+        const examDate = formatDate(d.exam_date || d.d);
+        const categories = d.categories || 'N/A';
+        const director = d.director_name || d.director || 'N. ILYASOVA';
+        const status = d.status || 'Tasdiqlangan';
 
-            function showError(message) {
-                document.getElementById('result').innerHTML = `
-                    <div class="alert alert-danger">
-                        <h5><i class="bi bi-x-circle"></i> Xatolik</h5>
-                        <p class="mb-0">${message}</p>
-                    </div>
-                `;
-            }
+        const statusClass = status === 'Tasdiqlangan' ? 'success' : 'warning';
+        
+        document.getElementById('result').innerHTML = `
+            <div class="alert alert-${statusClass}">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0"><i class="bi bi-${statusClass === 'success' ? 'check-circle' : 'exclamation-triangle'}"></i> Guvohnoma ${status}</h5>
+                    <span class="badge bg-${statusClass} status-badge">${status}</span>
+                </div>
+            </div>
+            <div class="info-item"><strong>Guvohnoma raqami:</strong><br><span class="fs-5">${certNumber}</span></div>
+            <div class="info-item"><strong>Talaba:</strong><br><span class="fs-5">${studentName}</span></div>
+            <div class="info-item"><strong>JShShIR:</strong><br><code class="fs-5">${jshshir}</code></div>
+            <div class="row">
+                <div class="col-md-6"><div class="info-item"><strong>Toifalar:</strong><br>${categories}</div></div>
+                <div class="col-md-6"><div class="info-item"><strong>Imtihon sanasi:</strong><br>${examDate}</div></div>
+            </div>
+            <div class="info-item"><strong>Rahbar:</strong><br>${director}</div>
+            <div class="mt-4 text-center">
+                <p class="text-muted"><small><i class="bi bi-info-circle"></i> "MMM TRAKTOR SERVIS" MCHJ</small></p>
+                <p class="text-warning"><small><i class="bi bi-shield-lock"></i> Maʼlumotlar QR kod ichida tekshirildi</small></p>
+            </div>
+        `;
+    }
 
-            // ЕСЛИ ЕСТЬ ПАРАМЕТР data – ПОКАЗЫВАЕМ ДАННЫЕ МГНОВЕННО
-            if (dataParam) {
-                try {
-                    const certData = JSON.parse(decodeURIComponent(dataParam));
-                    showCertificate(certData);
-                } catch (e) {
-                    showError("QR kod ma'lumotlari noto'g'ri.");
-                }
-                return;
-            }
+    function showError(message) {
+        document.getElementById('result').innerHTML = `
+            <div class="alert alert-danger">
+                <h5><i class="bi bi-x-circle"></i> Xatolik</h5>
+                <p class="mb-0">${message}</p>
+            </div>
+        `;
+    }
 
-            // Если нет data – ошибка
-            showError("Guvohnoma raqami topilmadi. QR kodni qayta skanering.");
-        })();
-    </script>
+    if (dataParam) {
+        try {
+            const certData = JSON.parse(decodeURIComponent(dataParam));
+            showCertificate(certData);
+        } catch (e) {
+            showError("QR kod ma'lumotlari noto'g'ri.");
+        }
+        return;
+    }
+
+    showError("Guvohnoma raqami topilmadi. QR kodni qayta skanering.");
+})();
+</script>
 </body>
 </html>
+
