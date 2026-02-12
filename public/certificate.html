@@ -879,16 +879,33 @@ fetch(`/api/documents/${id}/details`)
         }
 
         // Очищаем контейнер и создаём QR-код
-        const qrContainer = document.getElementById("qrCodeContainer");
-        qrContainer.innerHTML = ''; // важно!
-        new QRCode(qrContainer, {
-            text: qrContent,
-            width: 150,
-            height: 150,
-            colorDark: "#000000",
-            colorLight: "#ffffff",
-            correctLevel: QRCode.CorrectLevel.L
-        });
+        // Полностью очищаем контейнер
+const qrContainer = document.getElementById("qrCodeContainer");
+qrContainer.innerHTML = '';
+qrContainer.style.padding = '0';
+qrContainer.style.border = 'none';
+qrContainer.style.backgroundColor = 'white';
+
+// Генерируем QR с максимальной читаемостью
+new QRCode(qrContainer, {
+    text: qrContent,
+    width: 200,                    // ЕЩЁ БОЛЬШЕ
+    height: 200,
+    colorDark: "#000000",
+    colorLight: "#ffffff",
+    correctLevel: QRCode.CorrectLevel.H   // МАКСИМАЛЬНАЯ КОРРЕКЦИЯ
+});
+
+// Принудительно растягиваем canvas на весь контейнер
+setTimeout(() => {
+    const canvas = qrContainer.querySelector('canvas');
+    if (canvas) {
+        canvas.style.width = '100%';
+        canvas.style.height = '100%';
+        canvas.style.maxWidth = '200px';
+        canvas.style.maxHeight = '200px';
+    }
+}, 10);
         // =======================================
         
         document.title = `Guvohnoma №${displayCertNumber} - ${doc.student_name}`;
@@ -959,6 +976,7 @@ function showNotification(message, type = 'info') {
 </body>
 
 </html>
+
 
 
 
