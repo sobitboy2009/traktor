@@ -851,59 +851,29 @@ if (APP_CONFIG.useOnlineMode && APP_CONFIG.websiteDomain) {
     qrContent = `${base}/verify.html?cert=${doc.certificate_number || doc.id}`;
     console.log("QR (online):", qrContent);
 } else {
-    // ОФЛАЙН – данные в параметре data
-    const certData = {
-        certificate_number: doc.certificate_number || doc.id,
-        student_name: doc.student_name,
-        student_jshshir: doc.student_jshshir,
-        categories: doc.categories,
-        exam_date: formatDate(doc.exam_date),
-        course_hours: doc.course_hours,
-        status: doc.status || 'Tasdiqlangan',
-        director_name: doc.director_name || 'Y Usmonova'
-    };
-    const jsonData = encodeURIComponent(JSON.stringify(certData));
-    qrContent = `/verify.html?data=${jsonData}`;   // присваиваем qrContent
-    console.log("QR (offline):", qrContent);
-}
+    // ========== ГЕНЕРАЦИЯ QR-КОДА (ОФЛАЙН, КОРОТКИЙ JSON) ==========
+const shortData = {
+    n: doc.certificate_number || doc.id,      // номер
+    s: doc.student_name,                      // имя
+    j: doc.student_jshshir,                  // ЖШШИР
+    d: formatDate(doc.exam_date)             // дата экзамена
+};
 
-// СОЗДАЁМ QR-КОД ОДИН РАЗ (вне if/else)
+const jsonData = encodeURIComponent(JSON.stringify(shortData));
+const qrUrl = `/verify.html?data=${jsonData}`;
+
+console.log("QR URL length:", qrUrl.length, "characters");
+console.log("QR URL:", qrUrl);
+
 new QRCode(document.getElementById("qrCodeContainer"), {
-    text: qrContent,
-    width: 80,
-    height: 80,
+    text: qrUrl,
+    width: 150,            // УВЕЛИЧИВАЕМ РАЗМЕР
+    height: 150,
     colorDark: "#000000",
     colorLight: "#ffffff",
-    correctLevel: QRCode.CorrectLevel.H
+    correctLevel: QRCode.CorrectLevel.L   // L = LOW (больше места)
 });
-            
-            // Обновляем заголовок страницы
-            document.title = `Guvohnoma №${displayCertNumber} - ${doc.student_name}`;
-        })
-        .catch(err => {
-            console.error(err);
-            alert("Xatolik: guvohnoma topilmadi yoki serverda xatolik");
-            window.location.href = 'guvohnomalar-list.html';
-        });
-
-    // Функция для парсинга даты
-    function parseDate(dateString) {
-        if (!dateString) return null;
-        
-        try {
-            const date = new Date(dateString);
-            if (isNaN(date.getTime())) return null;
-            
-            const day = date.getDate();
-            const month = date.getMonth() + 1;
-            const year = date.getFullYear();
-            const monthName = monthsUz[month] || 'unknown';
-            
-            return { day, month, year, monthName };
-        } catch (e) {
-            console.error("Error parsing date:", dateString, e);
-            return null;
-        }
+// ================================================================
     }
 
     // Функция для форматирования даты
@@ -992,6 +962,7 @@ new QRCode(document.getElementById("qrCodeContainer"), {
 </body>
 
 </html>
+
 
 
 
