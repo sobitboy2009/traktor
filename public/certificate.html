@@ -844,28 +844,30 @@ const APP_CONFIG = {
             
 
             
+// Генерируем QR-код
 let qrContent;
 if (APP_CONFIG.useOnlineMode && APP_CONFIG.websiteDomain) {
-   const base = APP_CONFIG.websiteDomain.replace(/\/$/, '');
+    const base = APP_CONFIG.websiteDomain.replace(/\/$/, '');
     qrContent = `${base}/verify.html?cert=${doc.certificate_number || doc.id}`;
     console.log("QR (online):", qrContent);
 } else {
-    // РЕЖИМ ОФФЛАЙН (пока нет домена)
+    // ОФЛАЙН – данные в параметре data
     const certData = {
-        id: doc.id,
-        cert_number: doc.certificate_number || doc.id,
+        certificate_number: doc.certificate_number || doc.id,
         student_name: doc.student_name,
-        jshshir: doc.student_jshshir,
+        student_jshshir: doc.student_jshshir,
         categories: doc.categories,
         exam_date: formatDate(doc.exam_date),
-        course_hours: doc.course_hours
+        course_hours: doc.course_hours,
+        status: doc.status || 'Tasdiqlangan',
+        director_name: doc.director_name || 'Y Usmonova'
     };
-    const jsonStr = JSON.stringify(certData);
-    const encoded = encodeURIComponent(jsonStr);
-    qrContent = `/verify.html?data=${encoded}`; // относительный путь (работает везде)
+    const jsonData = encodeURIComponent(JSON.stringify(certData));
+    qrContent = `/verify.html?data=${jsonData}`;   // присваиваем qrContent
     console.log("QR (offline):", qrContent);
 }
 
+// СОЗДАЁМ QR-КОД ОДИН РАЗ (вне if/else)
 new QRCode(document.getElementById("qrCodeContainer"), {
     text: qrContent,
     width: 80,
@@ -990,6 +992,7 @@ new QRCode(document.getElementById("qrCodeContainer"), {
 </body>
 
 </html>
+
 
 
 
