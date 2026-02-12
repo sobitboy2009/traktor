@@ -670,298 +670,296 @@
     <script src="https://cdn.jsdelivr.net/npm/dom-to-image@2.6.0/dist/dom-to-image.min.js"></script>
 
     <script>
-
-
+// ==================== КОНФИГУРАЦИЯ ====================
 const APP_CONFIG = {
-    useOnlineMode: false,                 // Пока false, после покупки домена → true
-    websiteDomain: "https://www.mttt-mexanizator.uz",                   // После покупки: "https://ваш-домен.uz"
-    offlinePrefix: "CERT:"                // Не менять
+    useOnlineMode: false,                 // false = офлайн-режим (данные в QR)
+    websiteDomain: "https://www.mttt-mexanizator.uz"
 };
 // ==================== КОНЕЦ КОНФИГУРАЦИИ ====================
 
-    // Получаем ID из URL
-    const params = new URLSearchParams(window.location.search);
-    const id = params.get('id');
-
-    if (!id) {
-        alert("Guvohnoma ID si topilmadi");
-        window.location.href = 'guvohnomalar-list.html';
-    }
-
-    // Месяцы на узбекском языке
-    const monthsUz = {
-        1: 'yanvar', 2: 'fevral', 3: 'mart', 4: 'aprel',
-        5: 'may', 6: 'iyun', 7: 'iyul', 8: 'avgust',
-        9: 'sentabr', 10: 'oktabr', 11: 'noyabr', 12: 'dekabr'
-    };
-
-    // Функция для форматирования номера сертификата
-    function formatCertificateNumber(certNumber) {
-        if (!certNumber) return '';
-        
-        // Удаляем префикс GUV- если есть
-        let formattedNumber = certNumber;
-        if (formattedNumber.startsWith('GUV-')) {
-            formattedNumber = formattedNumber.substring(4); // Удаляем "GUV-"
-        }
-        
-        // Если остался формат типа "2026-0001", берем только номер
-        if (formattedNumber.includes('-')) {
-            formattedNumber = formattedNumber.split('-').pop();
-        }
-        
-        // Убеждаемся, что это число, если нет - оставляем как есть
-        return formattedNumber;
-    }
-
-    // Загружаем данные документа
-    fetch(`/api/documents/${id}/details`)
-        .then(res => {
-            if (!res.ok) throw new Error("Document not found");
-            return res.json();
-        })
-        .then(doc => {
-            console.log("Document data:", doc);
-            
-            // Форматируем номер сертификата
-            const formattedCertNumber = formatCertificateNumber(doc.certificate_number);
-            const displayCertNumber = formattedCertNumber || doc.id.toString().padStart(6, '0');
-            
-            // Извлекаем даты
-            const courseStart = parseDate(doc.course_start);
-            const courseEnd = parseDate(doc.course_end);
-            const examDate = parseDate(doc.exam_date);
-            
-            // Заполняем детальную информацию
-            document.getElementById('certificateDetails').innerHTML = `
-                <div class="info-item">
-                    <div class="info-label">Guvohnoma raqami</div>
-                    <div class="info-value certificate-number">№${displayCertNumber}</div>
-                </div>
-                <div class="info-item">
-                    <div class="info-label">Talaba F.I.Sh.</div>
-                    <div class="info-value">${doc.student_name}</div>
-                </div>
-                <div class="info-item">
-                    <div class="info-label">JShShIR</div>
-                    <div class="info-value">${doc.student_jshshir}</div>
-                </div>
-                <div class="info-item">
-                    <div class="info-label">O'quv kursi</div>
-                    <div class="info-value">${formatDate(doc.course_start)} - ${formatDate(doc.course_end)}</div>
-                </div>
-                <div class="info-item">
-                    <div class="info-label">Imtihon sanasi</div>
-                    <div class="info-value">${formatDate(doc.exam_date)}</div>
-                </div>
-                <div class="info-item">
-                    <div class="info-label">Imtihon komissiyasi</div>
-                    <div class="info-value">${doc.commission_number || '15'}-sonli</div>
-                </div>
-                <div class="info-item">
-                    <div class="info-label">Toifalar</div>
-                    <div class="info-value">${doc.categories}</div>
-                </div>
-                <div class="info-item">
-                    <div class="info-label">Soatlar</div>
-                    <div class="info-value">${doc.course_hours} soat</div>
-                </div>
-                <div class="info-item">
-                    <div class="info-label">Baholar</div>
-                    <div class="info-value">Y.H.Q : ${doc.grade1 || 4} (yaxshi), H.X.Q: ${doc.grade2 || 4} (yaxshi)</div>
-                </div>
-                <div class="info-item">
-                    <div class="info-label">Holati</div>
-                    <div class="info-value">
-                        <span class="badge ${doc.status === 'Tasdiqlangan' ? 'bg-success' : 'bg-warning'}">
-                            ${doc.status || 'Tasdiqlangan'}
-                        </span>
-                    </div>
-                </div>
-                <div class="info-item">
-                    <div class="info-label">Rahbar</div>
-                    <div class="info-value">${doc.director_name || 'Y Usmonova'}</div>
-                </div>
-                <div class="info-item">
-                    <div class="info-label">Yaratilgan sana</div>
-                    <div class="info-value">${formatDate(doc.created_at)}</div>
-                </div>
-                ${doc.student_birth_date ? `
-                <div class="info-item">
-                    <div class="info-label">Tug'ilgan sana</div>
-                    <div class="info-value">${formatDate(doc.student_birth_date)}</div>
-                </div>
-                ` : ''}
-                ${doc.student_phone ? `
-                <div class="info-item">
-                    <div class="info-label">Telefon</div>
-                    <div class="info-value">${doc.student_phone}</div>
-                </div>
-                ` : ''}
-            `;
-            
-            // Заполняем сертификат
-            document.getElementById('certNumber').textContent = displayCertNumber;
-            document.getElementById('studentName').textContent = doc.student_name;
-            document.getElementById('jshshir').textContent = doc.student_jshshir;
-            document.getElementById('categories').textContent = doc.categories;
-            document.getElementById('courseHours').textContent = doc.course_hours;
-            
-            // Исправлено: номер комиссии берется из базы
-            const commissionNumber = doc.commission_number || '15';
-            document.getElementById('commissionNumber').textContent = commissionNumber;
-            document.getElementById('commissionNumberFull').innerHTML = 
-                `<span class="bold-black">${commissionNumber}</span>-sonli`;
-                
-            document.getElementById('directorName').textContent = doc.director_name || 'Y Usmonova';
-            
-            // Даты
-            if (courseStart) {
-                document.getElementById('courseStartYear').textContent = courseStart.year;
-                document.getElementById('courseStartDay').textContent = courseStart.day;
-                document.getElementById('courseStartMonth').textContent = courseStart.monthName;
-            }
-            
-            if (courseEnd) {
-                document.getElementById('courseEndYear').textContent = courseEnd.year;
-                document.getElementById('courseEndDay').textContent = courseEnd.day;
-                document.getElementById('courseEndMonth').textContent = courseEnd.monthName;
-            }
-            
-            if (examDate) {
-                document.getElementById('examYear').textContent = examDate.year;
-                document.getElementById('examDay').textContent = examDate.day;
-                document.getElementById('examMonth').textContent = examDate.monthName;
-            }
-            
-            // Оценки
-            const grade1 = doc.grade1 || 4;
-            const grade2 = doc.grade2 || 4;
-            document.getElementById('grade1Text').textContent = `${grade1} (yaxshi)`;
-            document.getElementById('grade2Text').textContent = `${grade2} (yaxshi)`;
-            
-            // Генерируем QR-код
-            
-
-            
-// Генерируем QR-код
-let qrContent;
-if (APP_CONFIG.useOnlineMode && APP_CONFIG.websiteDomain) {
-    const base = APP_CONFIG.websiteDomain.replace(/\/$/, '');
-    qrContent = `${base}/verify.html?cert=${doc.certificate_number || doc.id}`;
-    console.log("QR (online):", qrContent);
-} else {
-    // ========== ГЕНЕРАЦИЯ QR-КОДА (ОФЛАЙН, КОРОТКИЙ JSON) ==========
-const shortData = {
-    n: doc.certificate_number || doc.id,      // номер
-    s: doc.student_name,                      // имя
-    j: doc.student_jshshir,                  // ЖШШИР
-    d: formatDate(doc.exam_date)             // дата экзамена
+// Месяцы на узбекском языке
+const monthsUz = {
+    1: 'yanvar', 2: 'fevral', 3: 'mart', 4: 'aprel',
+    5: 'may', 6: 'iyun', 7: 'iyul', 8: 'avgust',
+    9: 'sentabr', 10: 'oktabr', 11: 'noyabr', 12: 'dekabr'
 };
 
-const jsonData = encodeURIComponent(JSON.stringify(shortData));
-const qrUrl = `/verify.html?data=${jsonData}`;
-
-console.log("QR URL length:", qrUrl.length, "characters");
-console.log("QR URL:", qrUrl);
-
-new QRCode(document.getElementById("qrCodeContainer"), {
-    text: qrUrl,
-    width: 150,            // УВЕЛИЧИВАЕМ РАЗМЕР
-    height: 150,
-    colorDark: "#000000",
-    colorLight: "#ffffff",
-    correctLevel: QRCode.CorrectLevel.L   // L = LOW (больше места)
-});
-// ================================================================
+// Функция форматирования даты (ВЫНЕСЕНА НАВЕРХ)
+function formatDate(dateString) {
+    if (!dateString) return 'N/A';
+    try {
+        const date = new Date(dateString);
+        if (isNaN(date.getTime())) return dateString;
+        const day = date.getDate().toString().padStart(2, '0');
+        const month = (date.getMonth() + 1).toString().padStart(2, '0');
+        const year = date.getFullYear();
+        return `${day}.${month}.${year}`;
+    } catch (e) {
+        return dateString;
     }
+}
 
-    // Функция для форматирования даты
-    function formatDate(dateString) {
-        if (!dateString) return 'N/A';
+// Функция для форматирования номера сертификата
+function formatCertificateNumber(certNumber) {
+    if (!certNumber) return '';
+    let formattedNumber = certNumber;
+    if (formattedNumber.startsWith('GUV-')) {
+        formattedNumber = formattedNumber.substring(4);
+    }
+    if (formattedNumber.includes('-')) {
+        formattedNumber = formattedNumber.split('-').pop();
+    }
+    return formattedNumber;
+}
+
+// Функция для парсинга даты
+function parseDate(dateString) {
+    if (!dateString) return null;
+    try {
+        const date = new Date(dateString);
+        if (isNaN(date.getTime())) return null;
+        const day = date.getDate();
+        const month = date.getMonth() + 1;
+        const year = date.getFullYear();
+        const monthName = monthsUz[month] || 'unknown';
+        return { day, month, year, monthName };
+    } catch (e) {
+        console.error("Error parsing date:", dateString, e);
+        return null;
+    }
+}
+
+// Получаем ID из URL
+const params = new URLSearchParams(window.location.search);
+const id = params.get('id');
+
+if (!id) {
+    alert("Guvohnoma ID si topilmadi");
+    window.location.href = 'guvohnomalar-list.html';
+}
+
+// Загружаем данные документа
+fetch(`/api/documents/${id}/details`)
+    .then(res => {
+        if (!res.ok) throw new Error("Document not found");
+        return res.json();
+    })
+    .then(doc => {
+        console.log("Document data:", doc);
         
-        try {
-            const date = new Date(dateString);
-            if (isNaN(date.getTime())) return dateString;
+        // Форматируем номер сертификата
+        const formattedCertNumber = formatCertificateNumber(doc.certificate_number);
+        const displayCertNumber = formattedCertNumber || doc.id.toString().padStart(6, '0');
+        
+        // Извлекаем даты
+        const courseStart = parseDate(doc.course_start);
+        const courseEnd = parseDate(doc.course_end);
+        const examDate = parseDate(doc.exam_date);
+        
+        // Заполняем детальную информацию
+        document.getElementById('certificateDetails').innerHTML = `
+            <div class="info-item">
+                <div class="info-label">Guvohnoma raqami</div>
+                <div class="info-value certificate-number">№${displayCertNumber}</div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">Talaba F.I.Sh.</div>
+                <div class="info-value">${doc.student_name}</div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">JShShIR</div>
+                <div class="info-value">${doc.student_jshshir}</div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">O'quv kursi</div>
+                <div class="info-value">${formatDate(doc.course_start)} - ${formatDate(doc.course_end)}</div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">Imtihon sanasi</div>
+                <div class="info-value">${formatDate(doc.exam_date)}</div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">Imtihon komissiyasi</div>
+                <div class="info-value">${doc.commission_number || '15'}-sonli</div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">Toifalar</div>
+                <div class="info-value">${doc.categories}</div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">Soatlar</div>
+                <div class="info-value">${doc.course_hours} soat</div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">Baholar</div>
+                <div class="info-value">Y.H.Q : ${doc.grade1 || 4} (yaxshi), H.X.Q: ${doc.grade2 || 4} (yaxshi)</div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">Holati</div>
+                <div class="info-value">
+                    <span class="badge ${doc.status === 'Tasdiqlangan' ? 'bg-success' : 'bg-warning'}">
+                        ${doc.status || 'Tasdiqlangan'}
+                    </span>
+                </div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">Rahbar</div>
+                <div class="info-value">${doc.director_name || 'Y Usmonova'}</div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">Yaratilgan sana</div>
+                <div class="info-value">${formatDate(doc.created_at)}</div>
+            </div>
+            ${doc.student_birth_date ? `
+            <div class="info-item">
+                <div class="info-label">Tug'ilgan sana</div>
+                <div class="info-value">${formatDate(doc.student_birth_date)}</div>
+            </div>
+            ` : ''}
+            ${doc.student_phone ? `
+            <div class="info-item">
+                <div class="info-label">Telefon</div>
+                <div class="info-value">${doc.student_phone}</div>
+            </div>
+            ` : ''}
+        `;
+        
+        // Заполняем сертификат
+        document.getElementById('certNumber').textContent = displayCertNumber;
+        document.getElementById('studentName').textContent = doc.student_name;
+        document.getElementById('jshshir').textContent = doc.student_jshshir;
+        document.getElementById('categories').textContent = doc.categories;
+        document.getElementById('courseHours').textContent = doc.course_hours;
+        
+        const commissionNumber = doc.commission_number || '15';
+        document.getElementById('commissionNumber').textContent = commissionNumber;
+        document.getElementById('commissionNumberFull').innerHTML = 
+            `<span class="bold-black">${commissionNumber}</span>-sonli`;
             
-            const day = date.getDate().toString().padStart(2, '0');
-            const month = (date.getMonth() + 1).toString().padStart(2, '0');
-            const year = date.getFullYear();
-            return `${day}.${month}.${year}`;
-        } catch (e) {
-            return dateString;
+        document.getElementById('directorName').textContent = doc.director_name || 'Y Usmonova';
+        
+        if (courseStart) {
+            document.getElementById('courseStartYear').textContent = courseStart.year;
+            document.getElementById('courseStartDay').textContent = courseStart.day;
+            document.getElementById('courseStartMonth').textContent = courseStart.monthName;
         }
-    }
-
-    // Функция для скачивания сертификата как изображения
-   function downloadCertificate() {
-        const certificate = document.querySelector('.certificate');
-        const certNumber = document.getElementById('certNumber').textContent;
-        const studentName = document.getElementById('studentName').textContent;
+        if (courseEnd) {
+            document.getElementById('courseEndYear').textContent = courseEnd.year;
+            document.getElementById('courseEndDay').textContent = courseEnd.day;
+            document.getElementById('courseEndMonth').textContent = courseEnd.monthName;
+        }
+        if (examDate) {
+            document.getElementById('examYear').textContent = examDate.year;
+            document.getElementById('examDay').textContent = examDate.day;
+            document.getElementById('examMonth').textContent = examDate.monthName;
+        }
         
-        html2canvas(certificate, {
-            scale: 2,
-            useCORS: true,
-            logging: false,
-            backgroundColor: '#ffffff'
-        }).then(canvas => {
-            // Создаем ссылку для скачивания
-            const link = document.createElement('a');
-            const fileName = `guvohnoma-${certNumber}-${studentName.replace(/\s+/g, '-')}.png`;
-            link.download = fileName;
-            link.href = canvas.toDataURL('image/png');
-            link.click();
-            
-            // Показываем уведомление
-            showNotification("Guvohnoma yuklab olindi: " + fileName, "success");
-        });
-    }
-
-    // Функция для шаринга
-    function shareCertificate() {
-        const certNumber = document.getElementById('certNumber').textContent;
-        const studentName = document.getElementById('studentName').textContent;
-        const text = `"MMM TRAKTOR SERVIS" MCHJ guvohnomasi №${certNumber}. Talaba: ${studentName}`;
+        const grade1 = doc.grade1 || 4;
+        const grade2 = doc.grade2 || 4;
+        document.getElementById('grade1Text').textContent = `${grade1} (yaxshi)`;
+        document.getElementById('grade2Text').textContent = `${grade2} (yaxshi)`;
         
-        if (navigator.share) {
-            navigator.share({
-                title: 'Traktor haydovchisi guvohnomasi',
-                text: text,
-                url: window.location.href
-            });
+        // ========== ГЕНЕРАЦИЯ QR-КОДА ==========
+        let qrContent;
+        if (APP_CONFIG.useOnlineMode && APP_CONFIG.websiteDomain) {
+            const base = APP_CONFIG.websiteDomain.replace(/\/$/, '');
+            qrContent = `${base}/verify.html?cert=${doc.certificate_number || doc.id}`;
+            console.log("QR (online):", qrContent);
         } else {
-            // Копируем ссылку в буфер обмена
-            navigator.clipboard.writeText(window.location.href);
-            showNotification("Havola buferga nusxalandi!", "info");
+            // ОФЛАЙН – короткий JSON
+            const shortData = {
+                n: doc.certificate_number || doc.id,
+                s: doc.student_name,
+                j: doc.student_jshshir,
+                d: formatDate(doc.exam_date)
+            };
+            const jsonData = encodeURIComponent(JSON.stringify(shortData));
+            qrContent = `/verify.html?data=${jsonData}`;
+            console.log("QR (offline) length:", qrContent.length, "URL:", qrContent);
         }
-    }
 
-    // Функция для показа уведомлений
-    function showNotification(message, type = 'info') {
-        const alert = document.createElement('div');
-        alert.className = `alert alert-${type} alert-dismissible fade show position-fixed`;
-        alert.style.cssText = `
-            top: 20px;
-            right: 20px;
-            z-index: 9999;
-            min-width: 300px;
-        `;
-        alert.innerHTML = `
-            ${message}
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-        `;
+        // Очищаем контейнер и создаём QR-код
+        const qrContainer = document.getElementById("qrCodeContainer");
+        qrContainer.innerHTML = ''; // важно!
+        new QRCode(qrContainer, {
+            text: qrContent,
+            width: 150,
+            height: 150,
+            colorDark: "#000000",
+            colorLight: "#ffffff",
+            correctLevel: QRCode.CorrectLevel.L
+        });
+        // =======================================
         
-        document.body.appendChild(alert);
-        
-        // Автоматически удаляем через 3 секунды
-        setTimeout(() => {
-            alert.remove();
-        }, 3000);
+        document.title = `Guvohnoma №${displayCertNumber} - ${doc.student_name}`;
+    })
+    .catch(err => {
+        console.error(err);
+        alert("Xatolik: guvohnoma topilmadi yoki serverda xatolik");
+        window.location.href = 'guvohnomalar-list.html';
+    });
+
+// Функция для скачивания сертификата как изображения
+function downloadCertificate() {
+    const certificate = document.querySelector('.certificate');
+    const certNumber = document.getElementById('certNumber').textContent;
+    const studentName = document.getElementById('studentName').textContent;
+    
+    html2canvas(certificate, {
+        scale: 2,
+        useCORS: true,
+        logging: false,
+        backgroundColor: '#ffffff'
+    }).then(canvas => {
+        const link = document.createElement('a');
+        const fileName = `guvohnoma-${certNumber}-${studentName.replace(/\s+/g, '-')}.png`;
+        link.download = fileName;
+        link.href = canvas.toDataURL('image/png');
+        link.click();
+        showNotification("Guvohnoma yuklab olindi: " + fileName, "success");
+    });
+}
+
+// Функция для шаринга
+function shareCertificate() {
+    const certNumber = document.getElementById('certNumber').textContent;
+    const studentName = document.getElementById('studentName').textContent;
+    const text = `"MMM TRAKTOR SERVIS" MCHJ guvohnomasi №${certNumber}. Talaba: ${studentName}`;
+    
+    if (navigator.share) {
+        navigator.share({
+            title: 'Traktor haydovchisi guvohnomasi',
+            text: text,
+            url: window.location.href
+        });
+    } else {
+        navigator.clipboard.writeText(window.location.href);
+        showNotification("Havola buferga nusxalandi!", "info");
     }
+}
+
+// Функция для показа уведомлений
+function showNotification(message, type = 'info') {
+    const alert = document.createElement('div');
+    alert.className = `alert alert-${type} alert-dismissible fade show position-fixed`;
+    alert.style.cssText = `
+        top: 20px;
+        right: 20px;
+        z-index: 9999;
+        min-width: 300px;
+    `;
+    alert.innerHTML = `
+        ${message}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    `;
+    document.body.appendChild(alert);
+    setTimeout(() => alert.remove(), 3000);
+}
 </script>
 </body>
 
 </html>
+
 
 
 
