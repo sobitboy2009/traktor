@@ -630,7 +630,7 @@
                 </div>
 
                 <div class="qr-area" id="qrCodeContainer">
-                    <!-- QR-код будет сгенерирован здесь -->
+                     <img id="qrCodeImage" style="width:90px; height:90px; display:block;">
                 </div>
 
                 <div class="sign-area">
@@ -665,7 +665,7 @@
 </div>
 
     <!-- Подключаем библиотеки -->
-    <script src="https://cdn.jsdelivr.net/npm/qrcodejs/qrcode.min.js"></script>
+   
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/dom-to-image@2.6.0/dist/dom-to-image.min.js"></script>
 
@@ -881,42 +881,14 @@ fetch(`/api/documents/${id}/details`)
         // Очищаем контейнер и создаём QR-код
         // Полностью очищаем контейнер
 // Полная очистка и настройка контейнера
-const qrContainer = document.getElementById("qrCodeContainer");
-qrContainer.innerHTML = '';
-qrContainer.style.padding = '0';
-qrContainer.style.border = 'none';
-qrContainer.style.background = 'white';
-qrContainer.style.width = '90px';
-qrContainer.style.height = '90px';
-qrContainer.style.display = 'flex';
-qrContainer.style.alignItems = 'center';
-qrContainer.style.justifyContent = 'center';
 
-// Генерируем QR ровно 90×90 пикселей
-new QRCode(qrContainer, {
-    text: qrContent,
-    width: 90,
-    height: 90,
-    colorDark: "#000000",
-    colorLight: "#ffffff",
-    correctLevel: QRCode.CorrectLevel.H   // максимальная коррекция
-});
-
-// Принудительно убираем масштабирование canvas
-setTimeout(() => {
-    const canvas = qrContainer.querySelector('canvas');
-    if (canvas) {
-        canvas.style.width = '90px';
-        canvas.style.height = '90px';
-        canvas.width = 90;
-        canvas.height = 90;
-        canvas.style.maxWidth = '90px';
-        canvas.style.maxHeight = '90px';
-    }
-}, 10);
         // =======================================
         
         document.title = `Guvohnoma №${displayCertNumber} - ${doc.student_name}`;
+        // Вставить QR-код из ответа сервера
+if (doc.qr_code_base64) {
+    document.getElementById('qrCodeImage').src = 'data:image/png;base64,' + doc.qr_code_base64;
+}
     })
     .catch(err => {
         console.error(err);
@@ -984,6 +956,7 @@ function showNotification(message, type = 'info') {
 </body>
 
 </html>
+
 
 
 
