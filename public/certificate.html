@@ -674,7 +674,7 @@
 
 const APP_CONFIG = {
     useOnlineMode: true,                 // Пока false, после покупки домена → true
-    websiteDomain: "www.mttt-mexanizator.uz",                    // После покупки: "https://ваш-домен.uz"
+    websiteDomain: "https://www.mttt-mexanizator.uz",                   // После покупки: "https://ваш-домен.uz"
     offlinePrefix: "CERT:"                // Не менять
 };
 // ==================== КОНЕЦ КОНФИГУРАЦИИ ====================
@@ -846,8 +846,8 @@ const APP_CONFIG = {
             
 let qrContent;
 if (APP_CONFIG.useOnlineMode && APP_CONFIG.websiteDomain) {
-    // РЕЖИМ ОНЛАЙН (после покупки домена)
-    qrContent = `${APP_CONFIG.websiteDomain}/verify.html?cert=${doc.certificate_number || doc.id}`;
+   const base = APP_CONFIG.websiteDomain.replace(/\/$/, '');
+    qrContent = `${base}/verify.html?cert=${doc.certificate_number || doc.id}`;
     console.log("QR (online):", qrContent);
 } else {
     // РЕЖИМ ОФФЛАЙН (пока нет домена)
@@ -860,7 +860,9 @@ if (APP_CONFIG.useOnlineMode && APP_CONFIG.websiteDomain) {
         exam_date: formatDate(doc.exam_date),
         course_hours: doc.course_hours
     };
-    qrContent = APP_CONFIG.offlinePrefix + JSON.stringify(certData);
+    const jsonStr = JSON.stringify(certData);
+    const encoded = encodeURIComponent(jsonStr);
+    qrContent = `/verify.html?data=${encoded}`; // относительный путь (работает везде)
     console.log("QR (offline):", qrContent);
 }
 
@@ -988,6 +990,7 @@ new QRCode(document.getElementById("qrCodeContainer"), {
 </body>
 
 </html>
+
 
 
 
