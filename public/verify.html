@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Guvohnoma tekshiruvi</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <style>
         body {
             background-color: #f8f9fa;
@@ -13,7 +14,6 @@
             align-items: center;
             justify-content: center;
         }
-        
         .verification-card {
             max-width: 600px;
             width: 100%;
@@ -22,12 +22,10 @@
             border-radius: 15px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.1);
         }
-        
         .status-badge {
             font-size: 18px;
             padding: 10px 20px;
         }
-        
         .info-item {
             padding: 15px;
             background: #f8f9fa;
@@ -65,119 +63,141 @@
     </div>
 
     <script>
-        const cert = new URLSearchParams(window.location.search).get('cert');
-        
-        if (!cert) {
-            document.getElementById('result').innerHTML = `
-                <div class="alert alert-danger">
-                    <h5><i class="bi bi-exclamation-triangle"></i> Xatolik</h5>
-                    <p>Guvohnoma raqami topilmadi. QR kodni qayta skanering.</p>
-                </div>
-            `;
-        }
+        (function() {
+            const params = new URLSearchParams(window.location.search);
+            const dataParam = params.get('data');
+            const certParam = params.get('cert');
 
-        // Ищем документ по номеру сертификата или ID
-        fetch(`/api/verify?cert=${cert}`)
-            .then(r => {
-                if (!r.ok) throw new Error('Guvohnoma topilmadi');
-                return r.json();
-            })
-            .then(d => {
-                const statusClass = d.status === 'Tasdiqlangan' ? 'success' : 'warning';
-                
+            // Форматирование даты
+            function formatDate(dateString) {
+                if (!dateString) return 'N/A';
+                const date = new Date(dateString);
+                if (isNaN(date.getTime())) return dateString;
+                const day = date.getDate().toString().padStart(2, '0');
+                const month = (date.getMonth() + 1).toString().padStart(2, '0');
+                const year = date.getFullYear();
+                return `${day}.${month}.${year}`;
+            }
+
+            // Показать данные сертификата
+            function showCertificate(data) {
+                const statusClass = data.status === 'Tasdiqlangan' ? 'success' : 'warning';
+                const certNumber = data.certificate_number || data.cert_number || certParam || 'N/A';
+                const studentName = data.student_name || 'N/A';
+                const jshshir = data.student_jshshir || data.jshshir || 'N/A';
+                const categories = data.categories || 'N/A';
+                const examDate = formatDate(data.exam_date);
+                const director = data.director_name || 'N. ILYASOVA';
+
                 document.getElementById('result').innerHTML = `
                     <div class="alert alert-${statusClass}">
                         <div class="d-flex justify-content-between align-items-center">
                             <h5 class="mb-0">
                                 <i class="bi bi-${statusClass === 'success' ? 'check-circle' : 'exclamation-triangle'}"></i>
-                                Guvohnoma ${d.status || 'Tasdiqlangan'}
+                                Guvohnoma ${data.status || 'Tasdiqlangan'}
                             </h5>
                             <span class="badge bg-${statusClass} status-badge">
-                                ${d.status || 'Tasdiqlangan'}
+                                ${data.status || 'Tasdiqlangan'}
                             </span>
                         </div>
                     </div>
                     
                     <div class="info-item">
                         <strong>Guvohnoma raqami:</strong><br>
-                        <span class="fs-5">${d.certificate_number || cert}</span>
+                        <span class="fs-5">${certNumber}</span>
                     </div>
-                    
                     <div class="info-item">
                         <strong>Talaba:</strong><br>
-                        <span class="fs-5">${d.student_name}</span>
+                        <span class="fs-5">${studentName}</span>
                     </div>
-                    
                     <div class="info-item">
                         <strong>JShShIR:</strong><br>
-                        <code class="fs-5">${d.student_jshshir}</code>
+                        <code class="fs-5">${jshshir}</code>
                     </div>
-                    
                     <div class="row">
                         <div class="col-md-6">
                             <div class="info-item">
-                                <strong>Toifalar:</strong><br>
-                                ${d.categories}
+                                <strong>Toifalar:</strong><br>${categories}
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="info-item">
-                                <strong>Imtihon sana:</strong><br>
-                                ${formatDate(d.exam_date)}
+                                <strong>Imtihon sanasi:</strong><br>${examDate}
                             </div>
                         </div>
                     </div>
-                    
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="info-item">
-                                <strong>Kurs boshlanishi:</strong><br>
-                                ${formatDate(d.course_start)}
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="info-item">
-                                <strong>Kurs tugashi:</strong><br>
-                                ${formatDate(d.course_end)}
-                            </div>
-                        </div>
-                    </div>
-                    
                     <div class="info-item">
-                        <strong>Rahbar:</strong><br>
-                        ${d.director_name || 'N. ILYASOVA'}
+                        <strong>Rahbar:</strong><br>${director}
                     </div>
-                    
                     <div class="mt-4 text-center">
                         <p class="text-muted">
                             <small>
                                 <i class="bi bi-info-circle"></i>
-                                Ushbu guvohnoma "MMM TRAKTOR SERVIS" MCHJ tomonidan berilgan
+                                "MMM TRAKTOR SERVIS" MCHJ
                             </small>
                         </p>
+                        ${dataParam ? '<p class="text-warning"><small><i class="bi bi-shield-lock"></i> Maʼlumotlar QR kod ichida tekshirildi (offline)</small></p>' : ''}
                     </div>
                 `;
-            })
-            .catch(() => {
+            }
+
+            function showError(message) {
                 document.getElementById('result').innerHTML = `
                     <div class="alert alert-danger">
-                        <h5><i class="bi bi-x-circle"></i> Guvohnoma topilmadi</h5>
-                        <p class="mb-0">Berilgan raqam bilan guvohnoma topilmadi. Iltimos, qayta urinib ko'ring.</p>
+                        <h5><i class="bi bi-x-circle"></i> Xatolik</h5>
+                        <p class="mb-0">${message}</p>
                     </div>
                 `;
-            });
+            }
 
-        function formatDate(dateString) {
-            if (!dateString) return 'N/A';
-            const date = new Date(dateString);
-            if (isNaN(date.getTime())) return dateString;
-            
-            const day = date.getDate().toString().padStart(2, '0');
-            const month = (date.getMonth() + 1).toString().padStart(2, '0');
-            const year = date.getFullYear();
-            return `${day}.${month}.${year}`;
-        }
+            // --- 1. ОФЛАЙН: данные из параметра data ---
+            if (dataParam) {
+                try {
+                    const certData = JSON.parse(decodeURIComponent(dataParam));
+                    showCertificate(certData);
+                    return;
+                } catch (e) {
+                    showError("QR kod ma'lumotlari noto'g'ri.");
+                    return;
+                }
+            }
+
+            // --- 2. ОНЛАЙН: запрос к серверу (если реализован) ---
+            if (certParam) {
+                // показываем спиннер
+                document.getElementById('result').innerHTML = `
+                    <div class="text-center">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Tekshirilmoqda...</span>
+                        </div>
+                        <p class="mt-3">Serverdan ma'lumot olinmoqda...</p>
+                    </div>
+                `;
+
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 5000);
+
+                fetch(`/api/verify?cert=${encodeURIComponent(certParam)}`, { signal: controller.signal })
+                    .then(res => {
+                        clearTimeout(timeoutId);
+                        if (!res.ok) throw new Error('Server xatosi: ' + res.status);
+                        return res.json();
+                    })
+                    .then(data => showCertificate(data))
+                    .catch(err => {
+                        clearTimeout(timeoutId);
+                        if (err.name === 'AbortError') {
+                            showError("Server javob bermayapti. Iltimos, keyinroq urinib ko'ring.");
+                        } else {
+                            showError("Guvohnoma topilmadi yoki server bilan bog'lanib bo'lmadi.");
+                        }
+                    });
+                return;
+            }
+
+            // --- 3. Нет параметров ---
+            showError("Guvohnoma raqami topilmadi. QR kodni qayta skanering.");
+        })();
     </script>
 </body>
-
 </html>
