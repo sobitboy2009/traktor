@@ -425,74 +425,51 @@ func documentGet(w http.ResponseWriter, r *http.Request) {
 }
 
 func documentDetails(w http.ResponseWriter, r *http.Request) {
-	vars := mux.Vars(r)
-	idStr := vars["id"]
-	
-	id, err := strconv.Atoi(idStr)
-	if err != nil {
-		http.Error(w, "Invalid document ID", 400)
-		return
-	}
-	
-	var detail DocumentDetail
-	
-	err = db.QueryRow(`
-		SELECT 
-			d.id, d.title, d.student_jshshir, d.student_name,
-			d.course_start, d.course_end, d.exam_date,
-			d.categories, d.course_hours,
-			d.grade1, d.grade2, d.certificate_number, 
-			d.status, d.commission_number, d.director_name, d.created_at,
-			s.birth_date, s.phone
-		FROM documents d
-		LEFT JOIN students s ON d.student_jshshir = s.jshshir
-		WHERE d.id = $1
-	`, id).Scan(
-		&detail.ID, &detail.Title, &detail.StudentJSHSHIR, &detail.StudentName,
-		&detail.CourseStart, &detail.CourseEnd, &detail.ExamDate,
-		&detail.Categories, &detail.CourseHours,
-		&detail.Grade1, &detail.Grade2, &detail.CertificateNo,
-		&detail.Status, &detail.CommissionNo, &detail.DirectorName, &detail.CreatedAt,
-		&detail.StudentBirthDate, &detail.StudentPhone,
-	)
-	
-	if err != nil {
-		if err == sql.ErrNoRows {
-			http.Error(w, "Document not found", 404)
-		} else {
-			http.Error(w, err.Error(), 500)
-		}
-		return
-	}
-	
-	// Generate QR code
-	qrData := fmt.Sprintf(
-		"MMM TRAKTOR SERVIS\n" +
-		"Guvohnoma: %s\n" +
-		"Raqam: %d\n" +
-		"Talaba: %s\n" +
-		"JShShIR: %s\n" +
-		"Sana: %s\n" +
-		"Toifalar: %s\n" +
-		"Imtihon: %s",
-		detail.CertificateNo,
-		detail.ID,
-		detail.StudentName,
-		detail.StudentJSHSHIR,
-		detail.CreatedAt,
-		detail.Categories,
-		detail.ExamDate,
-	)
-	
-	qrCode, err := generateQRCode(qrData)
-	if err != nil {
-		log.Printf("QR kod generatsiya xatosi: %v", err)
-		detail.QRCodeBase64 = ""
-	} else {
-		detail.QRCodeBase64 = qrCode
-	}
-	
-	respondJSON(w, detail)
+    vars := mux.Vars(r)
+    idStr := vars["id"]
+
+    id, err := strconv.Atoi(idStr)
+    if err != nil {
+        http.Error(w, "Invalid document ID", 400)
+        return
+    }
+
+    var detail DocumentDetail
+
+    err = db.QueryRow(`
+        SELECT 
+            d.id, d.title, d.student_jshshir, d.student_name,
+            d.course_start, d.course_end, d.exam_date,
+            d.categories, d.course_hours,
+            d.grade1, d.grade2, d.certificate_number, 
+            d.status, d.commission_number, d.director_name, d.created_at,
+            s.birth_date, s.phone
+        FROM documents d
+        LEFT JOIN students s ON d.student_jshshir = s.jshshir
+        WHERE d.id = $1
+    `, id).Scan(
+        &detail.ID, &detail.Title, &detail.StudentJSHSHIR, &detail.StudentName,
+        &detail.CourseStart, &detail.CourseEnd, &detail.ExamDate,
+        &detail.Categories, &detail.CourseHours,
+        &detail.Grade1, &detail.Grade2, &detail.CertificateNo,
+        &detail.Status, &detail.CommissionNo, &detail.DirectorName, &detail.CreatedAt,
+        &detail.StudentBirthDate, &detail.StudentPhone,
+    )
+
+    if err != nil {
+        if err == sql.ErrNoRows {
+            http.Error(w, "Document not found", 404)
+        } else {
+            http.Error(w, err.Error(), 500)
+        }
+        return
+    }
+
+    // QR-код генерируется на фронтенде (certificate.html)
+    // Здесь не нужно генерировать QR, чтобы не тратить ресурсы и не создавать путаницу
+    detail.QRCodeBase64 = ""
+
+    respondJSON(w, detail)
 }
 
 
