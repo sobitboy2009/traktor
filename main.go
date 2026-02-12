@@ -465,36 +465,10 @@ func documentDetails(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	
-	// Generate QR code
-	qrData := fmt.Sprintf(
-		"MMM TRAKTOR SERVIS\n" +
-		"Guvohnoma: %s\n" +
-		"Raqam: %d\n" +
-		"Talaba: %s\n" +
-		"JShShIR: %s\n" +
-		"Sana: %s\n" +
-		"Toifalar: %s\n" +
-		"Imtihon: %s",
-		detail.CertificateNo,
-		detail.ID,
-		detail.StudentName,
-		detail.StudentJSHSHIR,
-		detail.CreatedAt,
-		detail.Categories,
-		detail.ExamDate,
-	)
-	
-	qrCode, err := generateQRCode(qrData)
-	if err != nil {
-		log.Printf("QR kod generatsiya xatosi: %v", err)
-		detail.QRCodeBase64 = ""
-	} else {
-		detail.QRCodeBase64 = qrCode
-	}
-	
-	respondJSON(w, detail)
+	detail.QRCodeBase64 = ""
+
+    respondJSON(w, detail)
 }
-isprav sam eto
 
 
 
