@@ -221,23 +221,25 @@ func getNextCertificateNumber() (string, error) {
 	return fmt.Sprintf("%04d", nextNum), nil
 }
 
-var BaseURL = "https://www.mttt-mexanizator.uz/" 
+var BaseURL = "https://www.mttt-mexanizator.uz"
 
 func generateQRCode(data string) (string, error) {
 	qr, err := qrcode.New(data, qrcode.Medium)
 	if err != nil {
 		return "", err
 	}
-	
+
 	var buf bytes.Buffer
 	img := qr.Image(256)
+
 	err = png.Encode(&buf, img)
 	if err != nil {
 		return "", err
 	}
-	
+
 	return base64.StdEncoding.EncodeToString(buf.Bytes()), nil
 }
+
 
 /* =========================
    DASHBOARD
@@ -428,15 +430,15 @@ func documentGet(w http.ResponseWriter, r *http.Request) {
 func documentDetails(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	idStr := vars["id"]
-	
+
 	id, err := strconv.Atoi(idStr)
 	if err != nil {
 		http.Error(w, "Invalid document ID", 400)
 		return
 	}
-	
+
 	var detail DocumentDetail
-	
+
 	err = db.QueryRow(`
 		SELECT 
 			d.id, d.title, d.student_jshshir, d.student_name,
@@ -456,7 +458,7 @@ func documentDetails(w http.ResponseWriter, r *http.Request) {
 		&detail.Status, &detail.CommissionNo, &detail.DirectorName, &detail.CreatedAt,
 		&detail.StudentBirthDate, &detail.StudentPhone,
 	)
-	
+
 	if err != nil {
 		if err == sql.ErrNoRows {
 			http.Error(w, "Document not found", 404)
@@ -465,11 +467,39 @@ func documentDetails(w http.ResponseWriter, r *http.Request) {
 		}
 		return
 	}
-	
-	detail.QRCodeBase64 = ""
 
-    respondJSON(w, detail)
+	// ================= QR DATA =================
+	qrPayload := map[string]string{
+		"n": detail.CertificateNo,
+		"s": detail.StudentName,
+		"j": detail.StudentJSHSHIR,
+		"d": detail.ExamDate.Format("2006-01-02"),
+		"c": detail.Categories,
+		"st": detail.Status,
+	}
+
+	jsonBytes, err := json.Marshal(qrPayload)
+	if err != nil {
+		http.Error(w, "QR data error", 500)
+		return
+	}
+
+	encoded := url.QueryEscape(string(jsonBytes))
+
+	qrURL := BaseURL + "verify.html?data=" + encoded
+
+	qrBase64, err := generateQRCode(qrURL)
+	if err != nil {
+		http.Error(w, "QR generation failed", 500)
+		return
+	}
+
+	detail.QRCodeBase64 = qrBase64
+	// ==========================================
+
+	respondJSON(w, detail)
 }
+
 
 
 
