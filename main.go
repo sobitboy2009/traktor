@@ -488,10 +488,13 @@ func documentDetails(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Printf("QR kod generatsiya xatosi: %v", err)
 		detail.QRCodeBase64 = ""
-	} 
+	} else {
+		detail.QRCodeBase64 = qrCode
+	}
 	
 	respondJSON(w, detail)
 }
+isprav sam eto
 
 
 
