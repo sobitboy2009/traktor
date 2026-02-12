@@ -34,10 +34,11 @@
         </div>
     </div>
 
-    <script>
-(function() {
+   <script>
+(function () {
     const params = new URLSearchParams(window.location.search);
-    const dataParam = params.get('data');
+    const dataParam = params.get('data'); // старый QR
+    const idParam = params.get('id');     // НОВЫЙ QR (ПРАВИЛЬНО)
 
     function formatDate(dateString) {
         if (!dateString) return 'N/A';
@@ -50,35 +51,40 @@
     }
 
     function showCertificate(d) {
-        // Поддержка коротких ключей (n,s,j,d) и длинных
         const certNumber = d.certificate_number || d.n || 'N/A';
         const studentName = d.student_name || d.s || 'N/A';
         const jshshir = d.student_jshshir || d.j || 'N/A';
         const examDate = formatDate(d.exam_date || d.d);
         const categories = d.categories || 'N/A';
-        const director = d.director_name || d.director || 'N. ILYASOVA';
+        const director = d.director_name || 'N. ILYASOVA';
         const status = d.status || 'Tasdiqlangan';
 
         const statusClass = status === 'Tasdiqlangan' ? 'success' : 'warning';
-        
+
         document.getElementById('result').innerHTML = `
             <div class="alert alert-${statusClass}">
                 <div class="d-flex justify-content-between align-items-center">
-                    <h5 class="mb-0"><i class="bi bi-${statusClass === 'success' ? 'check-circle' : 'exclamation-triangle'}"></i> Guvohnoma ${status}</h5>
-                    <span class="badge bg-${statusClass} status-badge">${status}</span>
+                    <h5 class="mb-0">
+                        <i class="bi bi-${statusClass === 'success' ? 'check-circle' : 'exclamation-triangle'}"></i>
+                        Guvohnoma ${status}
+                    </h5>
+                    <span class="badge bg-${statusClass}">${status}</span>
                 </div>
             </div>
-            <div class="info-item"><strong>Guvohnoma raqami:</strong><br><span class="fs-5">${certNumber}</span></div>
-            <div class="info-item"><strong>Talaba:</strong><br><span class="fs-5">${studentName}</span></div>
-            <div class="info-item"><strong>JShShIR:</strong><br><code class="fs-5">${jshshir}</code></div>
+
+            <div class="info-item"><strong>Guvohnoma raqami:</strong><br>${certNumber}</div>
+            <div class="info-item"><strong>Talaba:</strong><br>${studentName}</div>
+            <div class="info-item"><strong>JShShIR:</strong><br><code>${jshshir}</code></div>
+
             <div class="row">
                 <div class="col-md-6"><div class="info-item"><strong>Toifalar:</strong><br>${categories}</div></div>
                 <div class="col-md-6"><div class="info-item"><strong>Imtihon sanasi:</strong><br>${examDate}</div></div>
             </div>
+
             <div class="info-item"><strong>Rahbar:</strong><br>${director}</div>
-            <div class="mt-4 text-center">
-                <p class="text-muted"><small><i class="bi bi-info-circle"></i> "MMM TRAKTOR SERVIS" MCHJ</small></p>
-                <p class="text-warning"><small><i class="bi bi-shield-lock"></i> Maʼlumotlar QR kod ichida tekshirildi</small></p>
+
+            <div class="mt-4 text-center text-muted">
+                <small>“MMM TRAKTOR SERVIS” MCHJ</small>
             </div>
         `;
     }
@@ -86,25 +92,40 @@
     function showError(message) {
         document.getElementById('result').innerHTML = `
             <div class="alert alert-danger">
-                <h5><i class="bi bi-x-circle"></i> Xatolik</h5>
-                <p class="mb-0">${message}</p>
+                <h5>Xatolik</h5>
+                <p>${message}</p>
             </div>
         `;
     }
 
+    // ✅ НОВЫЙ, ПРАВИЛЬНЫЙ СПОСОБ
+    if (idParam) {
+        fetch(`/api/documents/${idParam}/details`)
+            .then(r => {
+                if (!r.ok) throw new Error();
+                return r.json();
+            })
+            .then(showCertificate)
+            .catch(() => showError("Guvohnoma topilmadi yoki bekor qilingan"));
+        return;
+    }
+
+    // 🔁 СТАРЫЙ QR (если остались)
     if (dataParam) {
         try {
             const certData = JSON.parse(decodeURIComponent(dataParam));
             showCertificate(certData);
         } catch (e) {
-            showError("QR kod ma'lumotlari noto'g'ri.");
+            showError("QR kod maʼlumotlari notoʻgʻri");
         }
         return;
     }
 
-    showError("Guvohnoma raqami topilmadi. QR kodni qayta skanering.");
+    showError("QR kod notoʻgʻri yoki eskirgan");
 })();
 </script>
+
 </body>
 </html>
+
 
