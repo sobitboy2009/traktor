@@ -935,6 +935,30 @@ fetch(`/api/documents/${id}/details`)
 })();// <-- закрытие самовызывающейся функции
 }) // <-- закрытие .then
 
+
+
+        function downloadCertificate() {
+        const certificate = document.querySelector('.certificate');
+        const certNumber = document.getElementById('certNumber').textContent;
+        const studentName = document.getElementById('studentName').textContent;
+        
+        html2canvas(certificate, {
+            scale: 2,
+            useCORS: true,
+            logging: false,
+            backgroundColor: '#ffffff'
+        }).then(canvas => {
+            // Создаем ссылку для скачивания
+            const link = document.createElement('a');
+            const fileName = `guvohnoma-${certNumber}-${studentName.replace(/\s+/g, '-')}.png`;
+            link.download = fileName;
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+            
+            // Показываем уведомление
+            showNotification("Guvohnoma yuklab olindi: " + fileName, "success");
+        });
+    }
 // Функция для шаринга
 function shareCertificate() {
     const certNumber = document.getElementById('certNumber').textContent;
@@ -974,6 +998,7 @@ function showNotification(message, type = 'info') {
 </body>
 
 </html>
+
 
 
 
