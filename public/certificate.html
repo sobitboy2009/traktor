@@ -918,8 +918,8 @@ fetch(`/api/documents/${id}/details`)
         }
 
         qrImg.src = canvas.toDataURL('image/png');
-        qrImg.style.width = '256px';
-        qrImg.style.height = '256px';
+        qrImg.style.width = '200px';
+        qrImg.style.height = '200px';
         qrImg.style.display = 'block';
     } catch (e) {
         console.error('❌ QR generation failed:', e);
@@ -974,6 +974,7 @@ function showNotification(message, type = 'info') {
 </body>
 
 </html>
+
 
 
 
