@@ -858,70 +858,78 @@ fetch(`/api/documents/${id}/details`)
         const grade2 = doc.grade2 || 4;
         document.getElementById('grade1Text').textContent = `${grade1} (yaxshi)`;
         document.getElementById('grade2Text').textContent = `${grade2} (yaxshi)`;
-        
+         });
         // ========== ГЕНЕРАЦИЯ QR-КОДА ==========
        // ========== ГЕНЕРАЦИЯ QR-КОДА НА КЛИЕНТЕ ==========
-const qrImg = document.getElementById('qrCodeImage');
-if (!qrImg) return;
+(function generateQR() {
+    const qrImg = document.getElementById('qrCodeImage');
+    if (!qrImg) return;
 
-// Формируем URL для проверки (всегда актуальный)
-const verifyUrl = `${window.location.origin}/verify.html?id=${doc.id}`;
-console.log('QR URL:', verifyUrl);
-
-try {
-    if (typeof qrcode === 'undefined') {
-        throw new Error('qrcode library not loaded');
+    // Формируем правильный URL для проверки
+    // Если включён онлайн-режим и указан домен — используем его,
+    // иначе берём текущий origin (localhost или реальный домен)
+    let baseUrl;
+    if (APP_CONFIG.useOnlineMode && APP_CONFIG.websiteDomain) {
+        baseUrl = APP_CONFIG.websiteDomain.replace(/\/$/, '');
+    } else {
+        baseUrl = window.location.origin;
     }
 
-    const qr = qrcode(0, 'M'); // 0 = авто-версия, 'M' = средняя коррекция
-    qr.addData(verifyUrl);
-    qr.make();
+    const verifyUrl = `${baseUrl}/verify.html?id=${doc.id}`;
+    console.log('✅ QR URL:', verifyUrl);
 
-    // Размер QR-кода в пикселях (можно увеличить для лучшей читаемости)
-    const cellSize = 5;       // размер одного модуля
-    const margin = 2;        // отступ
-    const size = qr.getModuleCount() * cellSize + margin * 2;
+    try {
+        if (typeof qrcode === 'undefined') {
+            throw new Error('qrcode library not loaded');
+        }
 
-    const canvas = document.createElement('canvas');
-    canvas.width = size;
-    canvas.height = size;
-    const ctx = canvas.getContext('2d');
+        const qr = qrcode(0, 'M'); // авто-версия, средняя коррекция
+        qr.addData(verifyUrl);
+        qr.make();
 
-    // Белый фон
-    ctx.fillStyle = '#ffffff';
-    ctx.fillRect(0, 0, size, size);
+        // Размер QR — 120×120 пикселей, модуль 5px, отступ 2px
+        const cellSize = 5;
+        const margin = 2;
+        const size = qr.getModuleCount() * cellSize + margin * 2;
 
-    // Чёрные модули
-    ctx.fillStyle = '#000000';
-    for (let row = 0; row < qr.getModuleCount(); row++) {
-        for (let col = 0; col < qr.getModuleCount(); col++) {
-            if (qr.isDark(row, col)) {
-                ctx.fillRect(
-                    col * cellSize + margin,
-                    row * cellSize + margin,
-                    cellSize,
-                    cellSize
-                );
+        const canvas = document.createElement('canvas');
+        canvas.width = size;
+        canvas.height = size;
+        const ctx = canvas.getContext('2d');
+
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(0, 0, size, size);
+        ctx.fillStyle = '#000000';
+
+        for (let row = 0; row < qr.getModuleCount(); row++) {
+            for (let col = 0; col < qr.getModuleCount(); col++) {
+                if (qr.isDark(row, col)) {
+                    ctx.fillRect(
+                        col * cellSize + margin,
+                        row * cellSize + margin,
+                        cellSize,
+                        cellSize
+                    );
+                }
             }
         }
-    }
 
-    // Устанавливаем canvas как src изображения
-    qrImg.src = canvas.toDataURL('image/png');
-    qrImg.style.width = '120px';    // чёткое отображение
-    qrImg.style.height = '120px';
-    qrImg.style.display = 'block';
-} catch (e) {
-    console.error('QR generation failed:', e);
-    // fallback: показываем ID текстом
-    qrImg.style.display = 'none';
-    const parent = qrImg.parentNode;
-    const fallback = document.createElement('div');
-    fallback.textContent = `ID: ${doc.id}`;
-    fallback.style.fontSize = '12px';
-    fallback.style.wordBreak = 'break-all';
-    parent.appendChild(fallback);
-}
+        qrImg.src = canvas.toDataURL('image/png');
+        qrImg.style.width = '120px';
+        qrImg.style.height = '120px';
+        qrImg.style.display = 'block';
+    } catch (e) {
+        console.error('❌ QR generation failed:', e);
+        // fallback — показываем ID текстом
+        qrImg.style.display = 'none';
+        const parent = qrImg.parentNode;
+        const fallback = document.createElement('div');
+        fallback.textContent = `ID: ${doc.id}`;
+        fallback.style.fontSize = '12px';
+        fallback.style.wordBreak = 'break-all';
+        parent.appendChild(fallback);
+    }
+})();
 
 // Функция для шаринга
 function shareCertificate() {
@@ -962,6 +970,7 @@ function showNotification(message, type = 'info') {
 </body>
 
 </html>
+
 
 
 
