@@ -864,23 +864,74 @@ fetch(`/api/documents/${id}/details`)
         
     
     // ========== ГЕНЕРАЦИЯ QR-КОДА НА КЛИЕНТЕ ==========
-    (function generateQR() {
-        const qrImg = document.getElementById('qrCodeImage');
-        if (!qrImg) return;
-        let baseUrl;
-        if (APP_CONFIG.useOnlineMode && APP_CONFIG.websiteDomain) {
-            baseUrl = APP_CONFIG.websiteDomain.replace(/\/$/, '');
-        } else {
-            baseUrl = window.location.origin;
+   // ========== ГЕНЕРАЦИЯ QR-КОДА НА КЛИЕНТЕ ==========
+(function generateQR() {
+    const qrImg = document.getElementById('qrCodeImage');
+    if (!qrImg) return;
+
+    // Формируем правильный URL для проверки
+    let baseUrl;
+    if (APP_CONFIG.useOnlineMode && APP_CONFIG.websiteDomain) {
+        baseUrl = APP_CONFIG.websiteDomain.replace(/\/$/, '');
+    } else {
+        baseUrl = window.location.origin;
+    }
+
+    const verifyUrl = `${baseUrl}/verify.html?id=${doc.id}`;
+    console.log('✅ QR URL:', verifyUrl);
+
+    try {
+        if (typeof qrcode === 'undefined') {
+            throw new Error('qrcode library not loaded');
         }
-        const verifyUrl = `${baseUrl}/verify.html?id=${doc.id}`;
-        console.log('✅ QR URL:', verifyUrl);
-        try {
-            // ... генерация QR ...
-        } catch (e) {
-            console.error('❌ QR generation failed:', e);
+
+        const qr = qrcode(0, 'M');
+        qr.addData(verifyUrl);
+        qr.make();
+
+        // Размер модуля — 6px, отступ — 3px (получится крупный QR)
+        const cellSize = 6;
+        const margin = 3;
+        const size = qr.getModuleCount() * cellSize + margin * 2;
+
+        const canvas = document.createElement('canvas');
+        canvas.width = size;
+        canvas.height = size;
+        const ctx = canvas.getContext('2d');
+
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(0, 0, size, size);
+        ctx.fillStyle = '#000000';
+
+        for (let row = 0; row < qr.getModuleCount(); row++) {
+            for (let col = 0; col < qr.getModuleCount(); col++) {
+                if (qr.isDark(row, col)) {
+                    ctx.fillRect(
+                        col * cellSize + margin,
+                        row * cellSize + margin,
+                        cellSize,
+                        cellSize
+                    );
+                }
+            }
         }
-    })(); // <-- закрытие самовызывающейся функции
+
+        qrImg.src = canvas.toDataURL('image/png');
+        qrImg.style.width = '256px';
+        qrImg.style.height = '256px';
+        qrImg.style.display = 'block';
+    } catch (e) {
+        console.error('❌ QR generation failed:', e);
+        // fallback — показываем ID текстом
+        qrImg.style.display = 'none';
+        const parent = qrImg.parentNode;
+        const fallback = document.createElement('div');
+        fallback.textContent = `ID: ${doc.id}`;
+        fallback.style.fontSize = '12px';
+        fallback.style.wordBreak = 'break-all';
+        parent.appendChild(fallback);
+    }
+})();// <-- закрытие самовызывающейся функции
 }) // <-- закрытие .then
 
 // Функция для шаринга
@@ -922,3 +973,4 @@ function showNotification(message, type = 'info') {
 </body>
 
 </html>
+
