@@ -3,14 +3,14 @@ package main
 import (
 	"bytes"
 	"database/sql"
-	"encoding/base64"
+	//"encoding/base64"
 	"encoding/json"
 	"fmt"
 	"io"
-	"image/png"
+//	"image/png"
 	"log"
 	"net/http"
-	"net/url"
+//	"net/url"
 	"os"
 	"path/filepath"
 	"strconv"
@@ -18,7 +18,7 @@ import (
 	"time"
 
 	"github.com/gorilla/mux"
-	"github.com/skip2/go-qrcode"
+	//"github.com/skip2/go-qrcode"
 	_ "github.com/lib/pq"
 )
 
@@ -87,7 +87,7 @@ type DocumentDetail struct {
 	DocumentOutput
 	StudentBirthDate string `json:"student_birth_date"`
 	StudentPhone     string `json:"student_phone"`
-	QRCodeBase64     string `json:"qr_code_base64"`
+	// QRCodeBase64     string `json:"qr_code_base64"`
 }
 
 type DocumentInput struct {
@@ -221,18 +221,18 @@ func getNextCertificateNumber() (string, error) {
 	return fmt.Sprintf("%04d", nextNum), nil
 }
 
-var BaseURL = "https://www.mttt-mexanizator.uz"
+// var BaseURL = "https://www.mttt-mexanizator.uz"
 
-func generateQRCode(data string) (string, error) {
-    qr, err := qrcode.New(data, qrcode.Low) // Low = крупные модули
-    if err != nil {
-        return "", err
-    }
-    var buf bytes.Buffer
-    img := qr.Image(512) // 512 пикселей
-    png.Encode(&buf, img)
-    return base64.StdEncoding.EncodeToString(buf.Bytes()), nil
-}
+// func generateQRCode(data string) (string, error) {
+//     qr, err := qrcode.New(data, qrcode.Low) 
+//     if err != nil {
+//         return "", err
+//     }
+//     var buf bytes.Buffer
+//     img := qr.Image(512) 
+//     png.Encode(&buf, img)
+//     return base64.StdEncoding.EncodeToString(buf.Bytes()), nil
+// }
 
 /* =========================
    DASHBOARD
