@@ -668,11 +668,11 @@
    
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/dom-to-image@2.6.0/dist/dom-to-image.min.js"></script>
-
+<script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js"></script>
     <script>
 // ==================== КОНФИГУРАЦИЯ ====================
 const APP_CONFIG = {
-    useOnlineMode: false,                 // false = офлайн-режим (данные в QR)
+    useOnlineMode: true,                 // false = офлайн-режим (данные в QR)
     websiteDomain: "https://www.mttt-mexanizator.uz"
 };
 // ==================== КОНЕЦ КОНФИГУРАЦИИ ====================
@@ -860,61 +860,67 @@ fetch(`/api/documents/${id}/details`)
         document.getElementById('grade2Text').textContent = `${grade2} (yaxshi)`;
         
         // ========== ГЕНЕРАЦИЯ QR-КОДА ==========
-        let qrContent;
-        if (APP_CONFIG.useOnlineMode && APP_CONFIG.websiteDomain) {
-            const base = APP_CONFIG.websiteDomain.replace(/\/$/, '');
-            qrContent = `${base}/verify.html?cert=${doc.certificate_number || doc.id}`;
-            console.log("QR (online):", qrContent);
-        } else {
-            // ОФЛАЙН – короткий JSON
-            const shortData = {
-                n: doc.certificate_number || doc.id,
-                s: doc.student_name,
-                j: doc.student_jshshir,
-                d: formatDate(doc.exam_date)
-            };
-            const jsonData = encodeURIComponent(JSON.stringify(shortData));
-            qrContent = `/verify.html?data=${jsonData}`;
-            console.log("QR (offline) length:", qrContent.length, "URL:", qrContent);
+       // ========== ГЕНЕРАЦИЯ QR-КОДА НА КЛИЕНТЕ ==========
+const qrImg = document.getElementById('qrCodeImage');
+if (!qrImg) return;
+
+// Формируем URL для проверки (всегда актуальный)
+const verifyUrl = `${window.location.origin}/verify.html?id=${doc.id}`;
+console.log('QR URL:', verifyUrl);
+
+try {
+    if (typeof qrcode === 'undefined') {
+        throw new Error('qrcode library not loaded');
+    }
+
+    const qr = qrcode(0, 'M'); // 0 = авто-версия, 'M' = средняя коррекция
+    qr.addData(verifyUrl);
+    qr.make();
+
+    // Размер QR-кода в пикселях (можно увеличить для лучшей читаемости)
+    const cellSize = 5;       // размер одного модуля
+    const margin = 2;        // отступ
+    const size = qr.getModuleCount() * cellSize + margin * 2;
+
+    const canvas = document.createElement('canvas');
+    canvas.width = size;
+    canvas.height = size;
+    const ctx = canvas.getContext('2d');
+
+    // Белый фон
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(0, 0, size, size);
+
+    // Чёрные модули
+    ctx.fillStyle = '#000000';
+    for (let row = 0; row < qr.getModuleCount(); row++) {
+        for (let col = 0; col < qr.getModuleCount(); col++) {
+            if (qr.isDark(row, col)) {
+                ctx.fillRect(
+                    col * cellSize + margin,
+                    row * cellSize + margin,
+                    cellSize,
+                    cellSize
+                );
+            }
         }
+    }
 
-        // Очищаем контейнер и создаём QR-код
-        // Полностью очищаем контейнер
-// Полная очистка и настройка контейнера
-
-        // =======================================
-        
-        document.title = `Guvohnoma №${displayCertNumber} - ${doc.student_name}`;
-        // Вставить QR-код из ответа сервера
-if (doc.qr_code_base64) {
-    document.getElementById('qrCodeImage').src = 'data:image/png;base64,' + doc.qr_code_base64;
-}
-    })
-    .catch(err => {
-        console.error(err);
-        alert("Xatolik: guvohnoma topilmadi yoki serverda xatolik");
-        window.location.href = 'guvohnomalar-list.html';
-    });
-
-// Функция для скачивания сертификата как изображения
-function downloadCertificate() {
-    const certificate = document.querySelector('.certificate');
-    const certNumber = document.getElementById('certNumber').textContent;
-    const studentName = document.getElementById('studentName').textContent;
-    
-    html2canvas(certificate, {
-        scale: 2,
-        useCORS: true,
-        logging: false,
-        backgroundColor: '#ffffff'
-    }).then(canvas => {
-        const link = document.createElement('a');
-        const fileName = `guvohnoma-${certNumber}-${studentName.replace(/\s+/g, '-')}.png`;
-        link.download = fileName;
-        link.href = canvas.toDataURL('image/png');
-        link.click();
-        showNotification("Guvohnoma yuklab olindi: " + fileName, "success");
-    });
+    // Устанавливаем canvas как src изображения
+    qrImg.src = canvas.toDataURL('image/png');
+    qrImg.style.width = '120px';    // чёткое отображение
+    qrImg.style.height = '120px';
+    qrImg.style.display = 'block';
+} catch (e) {
+    console.error('QR generation failed:', e);
+    // fallback: показываем ID текстом
+    qrImg.style.display = 'none';
+    const parent = qrImg.parentNode;
+    const fallback = document.createElement('div');
+    fallback.textContent = `ID: ${doc.id}`;
+    fallback.style.fontSize = '12px';
+    fallback.style.wordBreak = 'break-all';
+    parent.appendChild(fallback);
 }
 
 // Функция для шаринга
@@ -956,6 +962,7 @@ function showNotification(message, type = 'info') {
 </body>
 
 </html>
+
 
 
 
