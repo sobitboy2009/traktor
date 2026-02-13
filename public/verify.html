@@ -18,9 +18,20 @@
             margin: 0;
             padding: 20px;
         }
+        .certificate-details {
+            background: white;
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            border-left: 5px solid #004d4d;
+            max-width: 900px;
+            width: 100%;
+        }
+
         .certificate {
             width: 800px;
-            height: 560px;
+            height: 700px;
             background-color: white;
             position: relative;
             box-sizing: border-box;
@@ -28,12 +39,17 @@
             box-shadow: 0 10px 30px rgba(0,0,0,0.5);
             margin-bottom: 30px;
         }
+
+        
+
+        /* Контентная часть */
         .content {
             position: relative;
             z-index: 10;
             padding: 40px 100px;
             text-align: center;
         }
+
         .header-top {
             font-size: 26px;
             font-weight: 700;
@@ -41,18 +57,21 @@
             margin-bottom: 2px;
             letter-spacing: 0.5px;
         }
+
         .header-sub {
             font-size: 24px;
             font-weight: 700;
             color: #0d4a52;
             margin-bottom: 30px;
         }
+
         .doc-title {
             color: #e63946;
             font-size: 24px;
             font-weight: bold;
             margin-bottom: 15px;
         }
+
         .main-paragraph {
             font-size: 17px;
             line-height: 1.5;
@@ -60,10 +79,12 @@
             color: #333;
             margin-bottom: 25px;
         }
+
         .bold-black {
             font-weight: 800;
             color: #000;
         }
+
         .grades-row {
             display: flex;
             gap: 20px;
@@ -72,6 +93,7 @@
             margin-top: 40px;
             padding: 0 20px;
         }
+
         .grades-text {
             text-align: left;
             font-size: 13px;
@@ -79,18 +101,23 @@
             color: #000C1F;
             line-height: 1.4;
         }
-        .qr-area {
-            width: 90px;
-            height: 90px;
-            border: 1px solid #ccc;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
+
+        
+            .qr-area {
+    width: 200px !important;
+    height: 200px !important;
+    margin-bottom: 100px;
+    border: 1px solid #ccc;
+    display: flex;           /* ← flex для центрирования */
+    align-items: center;
+    justify-content: center;
+}
+
         .sign-area {
             text-align: left;
             width: 180px;
         }
+
         .sign-name {
             font-weight: bold;
             color: #213a8f;
@@ -99,6 +126,7 @@
             margin-bottom: 2px;
             font-size: 14px;
         }
+
         .sign-desc {
             background-color: #64b5f6;
             color: white;
@@ -106,6 +134,7 @@
             padding: 1px 4px;
             display: inline-block;
         }
+
         .footer-warning {
             position: absolute;
             bottom: 25px;
@@ -116,26 +145,435 @@
             font-weight: bold;
             color: #0d4a52;
         }
-        .error-box {
-            background: white;
-            border-radius: 10px;
-            padding: 40px;
-            text-align: center;
-            max-width: 600px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+
+        
+
+
+
+
+
+
+/* Левый декор (треугольники смотрят вправо) */
+        .side-decor-left {
+            position: absolute;
+            left: 0; top: 0; bottom: 0;
+            width: 120px;
+            z-index: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
-        .loading {
-            background: white;
-            padding: 40px;
-            border-radius: 10px;
-            text-align: center;
+        .tri-l {
+            position: absolute;
+            width: 0; height: 0;
+            border-top: 40px solid transparent;
+            border-bottom: 40px solid transparent;
+            border-left: 50px solid #004d4d;
         }
+
+        /* Правый декор (треугольники смотрят влево) */
+        .side-decor-right {
+            position: absolute;
+            right: 0; top: 0; bottom: 0;
+            width: 120px;
+            z-index: 1;
+        }
+        .tri-r {
+            position: absolute;
+            right: 0;
+            width: 0; height: 0;
+            border-top: 40px solid transparent;
+            border-bottom: 40px solid transparent;
+            border-right: 50px solid #004d4d;
+        }
+
+        /* Дополнительные цветные треугольники для имитации фото */
+        .tri-teal { border-left-color: #1b8a8a !important; }
+        .tri-dark { border-left-color: #062c30 !important; }
+        .tri-teal-r { border-right-color: #1b8a8a !important; }
+
+
+
+
+
+
+
+
+
+
+
+
+        /* Кнопки действий */
+        .action-buttons {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+            display: flex;
+            gap: 10px;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .info-item {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #004d4d;
+        }
+        
+        .info-label {
+            font-weight: 600;
+            color: #495057;
+            margin-bottom: 5px;
+            font-size: 14px;
+        }
+        
+        .info-value {
+            font-size: 15px;
+            color: #212529;
+            font-weight: 500;
+        }
+        
+        .certificate-number {
+            font-size: 18px;
+            font-weight: 700;
+            color: #e63946;
+            letter-spacing: 1px;
+        }
+
+        /* Навигация */
+        .navbar-custom {
+            background-color: #004d4d;
+            width: 100%;
+            margin-bottom: 20px;
+        }
+
+        .btn-return {
+            background-color: white;
+            color: #004d4d;
+            border: none;
+        }
+
+        .btn-return:hover {
+            background-color: #f0f0f0;
+            color: #004d4d;
+        }
+
+        @media print {
+            .certificate-details,
+            .action-buttons,
+            .navbar-custom {
+                display: none !important;
+            }
+            
+            body {
+                background: white;
+                padding: 0;
+                margin: 0;
+            }
+            
+            .certificate {
+                box-shadow: none;
+                margin: 0;
+            }
+        }
+
+        @media (max-width: 850px) {
+            .certificate {
+                width: 95%;
+                height: auto;
+                min-height: 560px;
+            }
+            
+            .content {
+                padding: 30px 60px;
+            }
+            
+            .side-decor-left,
+            .side-decor-right {
+                width: 80px;
+            }
+            
+            .tri-l {
+                border-left-width: 40px;
+            }
+            
+            .tri-r {
+                border-right-width: 40px;
+            }
+        }
+
+
+
+
+
+
+
+        .decor-container {
+        position: absolute;
+        left: 0; top: 0; bottom: 0;
+        width: 30%;
+        overflow: hidden;
+    }
+    .decor-container2 {
+        position: absolute;
+        right: 0; top: 0; bottom: 0;
+        width: 30%;
+        transform: rotateX(180deg) scaleX(-1);
+        
+        overflow: hidden;
+    }
+
+    /* Базовый класс для всех фигур */
+    .top-dark {
+    position: absolute;
+    
+    width: 0; 
+    height: 0;
+    
+   
+    border-top: 110px solid #002366; 
+    border-left: 70px solid transparent;
+    border-right: 60px solid transparent;
+    
+    top: 0; 
+    left: 0;
+}
+
+    /* 2. Зеленый треугольник под ним (смотрит вправо) */
+    .top-green {
+        border-top: 110px solid transparent;
+        border-bottom: 0px solid transparent;
+        border-left: 70px solid #d7e1ef;
+        top: 0; left: 0;
+    }
+
+    /* 3. Маленький зеленый перевернутый (ниже) */
+    .mid-green-down {
+        background-color: #003153;
+        top: 160px; left: 10px;
+        width: 50px;
+        height: 50px;
+        position: absolute;
+        bottom: 0
+    }
+
+    .mid-green-down2 {
+    position: absolute;
+    width: 50px; 
+    height: 60px;
+    background-color: #002B3D;
+   
+    
+    /* Позиционирование */
+    top: 260px; 
+    left: 10px;
+}
+
+    /* 4. Темный "клюв" слева */
+    .mid-dark-left {
+    position: absolute;
+    width: 60px;
+    height: 60px;
+    background-color: #062945;
+    
+    top: 340px; 
+    left: 10px;
+}
+    .mid-dark-left2 {
+    position: absolute;
+    width: 50px;
+    height: 20px;
+    background-color: #fff;
+    border-bottom: 100px solid #708090; 
+    
+    
+    top: 480px; 
+    left: 0;
+}
+    .mid-dark-left3 {
+    position: absolute;
+    width: 60px;
+    height: 80px;
+    /* Убираем одну сторону, чтобы получить прямой угол */
+    border-top: 100px solid #B0C4DE; 
+    border-right: 100px solid transparent;
+    top: 578px; 
+    left: 0;
+    z-index: 6;
+}
+
+    /* 5. Сложная композиция снизу (Зеленый + Темный внахлест) */
+    .bottom-group {
+        position: absolute;
+        bottom: 0; left: 0;
+    }
+
+    .bot-green-tri {
+        border-bottom: 100px solid #002147;
+        border-right: 100px solid transparent;
+        position: absolute; bottom: 0; left: 0;
+    }
+
+    .bot-dark-overlay {
+        border-bottom: 140px solid #062c30;
+        border-left: 110px solid transparent;
+        position: absolute; bottom: 0; left: 40px;
+    }
+        /* Контейнер для всей нижней композиции */
+.footer-decor {
+        position: absolute;
+        bottom: 0; left: 0;
+        width: 350px; height: 300px;
+    }
+
+    .shape {
+        position: absolute;
+        bottom: 0; left: 0;
+    }
+
+    /* 1. Большой темно-синий фон (нижний слой) */
+    .dark-base {
+        width: 200px; height: 180px;
+        background-color: #062c30;
+        clip-path: polygon(0 0, 100% 100%, 0 100%);
+    }
+
+    
+
+    .grey-grad0 {
+    width: 70px; 
+    height: 55px;
+    background: linear-gradient(160deg, transparent, #051356);
+    bottom: 306px; 
+    left: 36px;
+    
+    z-index: 2;
+}
+    .grey-grad {
+        width: 75px; height: 57px;
+        background: linear-gradient(135deg, #082567, #003344);
+        bottom: 88px; left: 20px;
+        z-index: 2;
+    }
+    .grey-grad2 {
+        width: 70px; height: 45px;
+        background: linear-gradient(135deg, #051356, #68696b);
+        
+        bottom: 0; left: 101px;
+        z-index: 0;
+    }
+    .grey-grad3 {
+    position: absolute; 
+    width: 110px; 
+    height: 90px;
+    background: linear-gradient(135deg, #003D45, #051356); 
+    bottom: 0; 
+    left: 15px;
+    
+    
+    z-index: 2;
+}
+
+   
+    .teal-arrow {
+        width: 60px; height: 70px;
+        background-color: #7a7e83;
+        bottom: 88px;
+        
+        
+    }
+
+    .teal-arrow2 {
+        width: 70px; height: 58px;
+        background-color: #6699CC;
+        bottom: 88px; left: 57px;
+        
+        z-index: 3;
+    }
+
+    .teal-arrow3 {
+        width: 50px; height: 50px;
+        background: linear-gradient(135deg, #042125, #042125); 
+        bottom: 150px; left: 88px;
+       
+        
+        z-index: 3;
+    }
+
+    .teal-arrow4 {
+    position: absolute; 
+    width: 70px; 
+    height: 60px;
+    background: linear-gradient(135deg, #050A30, #1b5860); 
+    bottom: 178px; 
+    left: 50px;
+   
+    z-index: 3;
+}
+
+    /* 5. Маленькая стрелочка справа внизу */
+    .small-arrow {
+        width: 60px; height: 44px;
+        background-color: #050A30;
+        bottom: 20px; left: 140px;
+        
+    }
     </style>
 </head>
 <body>
     <!-- СЕРТИФИКАТ (скрыт до загрузки данных) -->
     <div id="certificateContainer" style="display: none;">
         <div class="certificate">
+            <div class="decor-container">
+    <div class="shape top-dark"></div>
+    <div class="shape top-green"></div>
+    <div class=" mid-green-down"></div>
+    <div class=" mid-green-down2"></div>
+    <div class="shape mid-dark-left"></div>
+    <div class="shape mid-dark-left2"></div>
+    <div class="shape mid-dark-left3"></div>
+   <div class="footer-decor"> 
+    <div class="shape grey-grad0"></div>
+    <div class="shape grey-grad"></div>
+    <div class="shape grey-grad2"></div>
+    <div class="shape grey-grad3"></div>  
+    <div class="shape teal-arrow"></div>
+    <div class="shape teal-arrow2"></div>
+    <div class="shape teal-arrow3"></div>
+    <div class="shape teal-arrow4"></div>
+    <div class="shape small-arrow"></div>
+   </div>
+    
+</div>
+
+        <div class="decor-container2">
+    <div class="shape top-dark"></div>
+    <div class="shape top-green"></div>
+    <div class=" mid-green-down"></div>
+    <div class=" mid-green-down2"></div>
+    <div class="shape mid-dark-left"></div>
+    <div class="shape mid-dark-left2"></div>
+    <div class="shape mid-dark-left3"></div>
+   <div class="footer-decor">
+    <div class="shape grey-grad0"></div>
+    <div class="shape grey-grad"></div>
+    <div class="shape grey-grad2"></div>
+    <div class="shape grey-grad3"></div>
+    <div class="shape teal-arrow"></div>
+    <div class="shape teal-arrow2"></div>
+    <div class="shape teal-arrow3"></div>
+    <div class="shape teal-arrow4"></div>
+    
+   </div>
+    
+</div>
             <div class="content">
                 <div class="header-top">O'ZBEKISTON RESPUBLIKASI</div>
                 <div class="header-sub">"MAXSUS TEXNIKA TALIM TEXNOLOGIYALARI" MCHJ</div>
@@ -296,4 +734,5 @@
     </script>
 </body>
 </html>
+
 
