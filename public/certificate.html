@@ -105,14 +105,15 @@
         }
 
         .qr-area {
-            width: 200px !important;
+            .qr-area {
+    width: 200px !important;
     height: 200px !important;
-            margin-bottom: 100px;
-            border: 1px solid #ccc;
-            display: block;
-            align-items: center;
-            justify-content: center;
-        }
+    margin-bottom: 100px;
+    border: 1px solid #ccc;
+    display: flex;           /* ← flex для центрирования */
+    align-items: center;
+    justify-content: center;
+}
 
         .sign-area {
             text-align: left;
@@ -973,4 +974,5 @@ function showNotification(message, type = 'info') {
 </body>
 
 </html>
+
 
