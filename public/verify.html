@@ -5,127 +5,294 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Guvohnoma tekshiruvi</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Arimo:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        body { background-color: #f8f9fa; min-height: 100vh; display: flex; align-items: center; justify-content: center; }
-        .verification-card { max-width: 600px; width: 100%; padding: 30px; background: white; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
-        .status-badge { font-size: 18px; padding: 10px 20px; }
-        .info-item { padding: 15px; background: #f8f9fa; border-radius: 8px; margin-bottom: 15px; border-left: 4px solid #0d6efd; }
+        body {
+            background-color: #555;
+            font-family: 'Arimo', sans-serif;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+        .certificate {
+            width: 800px;
+            height: 560px;
+            background-color: white;
+            position: relative;
+            box-sizing: border-box;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            margin-bottom: 30px;
+        }
+        .content {
+            position: relative;
+            z-index: 10;
+            padding: 40px 100px;
+            text-align: center;
+        }
+        .header-top {
+            font-size: 26px;
+            font-weight: 700;
+            color: #0d4a52;
+            margin-bottom: 2px;
+            letter-spacing: 0.5px;
+        }
+        .header-sub {
+            font-size: 24px;
+            font-weight: 700;
+            color: #0d4a52;
+            margin-bottom: 30px;
+        }
+        .doc-title {
+            color: #e63946;
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        .main-paragraph {
+            font-size: 17px;
+            line-height: 1.5;
+            text-align: center;
+            color: #333;
+            margin-bottom: 25px;
+        }
+        .bold-black {
+            font-weight: 800;
+            color: #000;
+        }
+        .grades-row {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            align-items: center;
+            margin-top: 40px;
+            padding: 0 20px;
+        }
+        .grades-text {
+            text-align: left;
+            font-size: 13px;
+            font-weight: bold;
+            color: #000C1F;
+            line-height: 1.4;
+        }
+        .qr-area {
+            width: 90px;
+            height: 90px;
+            border: 1px solid #ccc;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .sign-area {
+            text-align: left;
+            width: 180px;
+        }
+        .sign-name {
+            font-weight: bold;
+            color: #213a8f;
+            border-bottom: 1px solid #000;
+            display: block;
+            margin-bottom: 2px;
+            font-size: 14px;
+        }
+        .sign-desc {
+            background-color: #64b5f6;
+            color: white;
+            font-size: 10px;
+            padding: 1px 4px;
+            display: inline-block;
+        }
+        .footer-warning {
+            position: absolute;
+            bottom: 25px;
+            width: 100%;
+            left: 0;
+            text-align: center;
+            font-size: 14px;
+            font-weight: bold;
+            color: #0d4a52;
+        }
+        .error-box {
+            background: white;
+            border-radius: 10px;
+            padding: 40px;
+            text-align: center;
+            max-width: 600px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        .loading {
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            text-align: center;
+        }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="verification-card">
-            <div class="text-center mb-4">
-                <h2 class="text-primary"><i class="bi bi-shield-check"></i> Guvohnoma tekshiruvi</h2>
-                <p class="text-muted">QR kod skanerlash orqali guvohnoma haqiqiyligini tekshiring</p>
-            </div>
-            <div id="result">
-                <div class="text-center">
-                    <div class="spinner-border text-primary" role="status">
-                        <span class="visually-hidden">Tekshirilmoqda...</span>
-                    </div>
-                    <p class="mt-3">Tekshirilmoqda...</p>
+    <!-- СЕРТИФИКАТ (скрыт до загрузки данных) -->
+    <div id="certificateContainer" style="display: none;">
+        <div class="certificate">
+            <div class="content">
+                <div class="header-top">O'ZBEKISTON RESPUBLIKASI</div>
+                <div class="header-sub">"MAXSUS TEXNIKA TALIM TEXNOLOGIYALARI" MCHJ</div>
+                <div class="doc-title">GUVOHNOMA № <span id="verify_certNumber">000000</span></div>
+                <div class="main-paragraph">
+                    Berildi ushbu guvohnoma <span class="bold-black" id="verify_studentName">FAMILIYA ISM OTASI</span> ga<br>
+                    (JShShIR <span class="bold-black" id="verify_jshshir">00000000000000</span>) shu haqidakim u 
+                    <span class="bold-black" id="verify_courseStartYear">2024</span>-yilning 
+                    <span class="bold-black" id="verify_courseStartDay">16</span>-<span id="verify_courseStartMonth">dekabr</span> dan<br>
+                    <span class="bold-black" id="verify_courseEndYear">2025</span>-yilning 
+                    <span class="bold-black" id="verify_courseEndDay">24</span>-<span id="verify_courseEndMonth">mart</span> gacha 
+                    <span class="bold-black" id="verify_categories">A, B, C, D</span> toifali traktorchi<br>
+                    mashinist <span class="bold-black" id="verify_courseHours">280</span> soatlik o'quv kursini tamomladi<br>
+                    va <span class="bold-black" id="verify_examYear">2025</span>-yilning 
+                    <span class="bold-black" id="verify_examDay">24</span>-<span id="verify_examMonth">mart</span> dagi 
+                    <span id="verify_commissionNumberFull">
+                        <span class="bold-black" id="verify_commissionNumber">15</span>-sonli
+                    </span> imtihon komissiyasining<br>
+                    bayoniga asosan bitiruv imtihonlaridan quyidagi baholarni oladi.
                 </div>
-            </div>
-            <div class="text-center mt-4">
-                <a href="/" class="btn btn-outline-primary"><i class="bi bi-house"></i> Bosh sahifaga qaytish</a>
+                <div class="grades-row">
+                    <div class="grades-text">
+                        Y.H.Q <span style="color:#213a8f" id="verify_grade1Text">4 (yaxshi)</span><br>
+                        H.X.Q <span style="color:#213a8f" id="verify_grade2Text">4 (yaxshi)</span>
+                    </div>
+                    <div class="qr-area">
+                        <!-- При верификации QR не нужен, просто заглушка -->
+                        <div style="width:90px; height:90px; background:#eee; display:flex; align-items:center; justify-content:center; font-size:10px; color:#333;">VERIFIED</div>
+                    </div>
+                    <div class="sign-area">
+                        <span class="sign-name" id="verify_directorName">Y Usmonova</span>
+                        <span class="sign-desc">Ta'lim muassasasi rahbari</span>
+                    </div>
+                </div>
+                <br><br>
+                <div class="footer-warning">
+                    Ushbu hujjat texnika vositalarini boshqarish huquqini bermaydi
+                </div>
             </div>
         </div>
     </div>
 
-   <script>
-(function () {
-    const params = new URLSearchParams(window.location.search);
-    const dataParam = params.get('data'); // старый QR
-    const idParam = params.get('id');     // НОВЫЙ QR (ПРАВИЛЬНО)
+    <!-- ИНДИКАТОР ЗАГРУЗКИ -->
+    <div id="loadingIndicator" class="loading">
+        <div class="spinner-border text-primary" role="status"></div>
+        <p class="mt-3">Tekshirilmoqda...</p>
+    </div>
 
-    function formatDate(dateString) {
-        if (!dateString) return 'N/A';
-        const date = new Date(dateString);
-        if (isNaN(date.getTime())) return dateString;
-        const day = date.getDate().toString().padStart(2, '0');
-        const month = (date.getMonth() + 1).toString().padStart(2, '0');
-        const year = date.getFullYear();
-        return `${day}.${month}.${year}`;
-    }
+    <!-- БЛОК ОШИБКИ -->
+    <div id="errorContainer" style="display: none;" class="error-box">
+        <h2 class="text-danger"><i class="bi bi-shield-x"></i> Xatolik</h2>
+        <p id="errorMessage" class="mt-3">Guvohnoma topilmadi yoki bekor qilingan.</p>
+        <a href="/" class="btn btn-primary mt-4">Bosh sahifaga qaytish</a>
+    </div>
 
-    function showCertificate(d) {
-        const certNumber = d.certificate_number || d.n || 'N/A';
-        const studentName = d.student_name || d.s || 'N/A';
-        const jshshir = d.student_jshshir || d.j || 'N/A';
-        const examDate = formatDate(d.exam_date || d.d);
-        const categories = d.categories || 'N/A';
-        const director = d.director_name || 'N. ILYASOVA';
-        const status = d.status || 'Tasdiqlangan';
+    <script>
+        // ==================== КОНФИГУРАЦИЯ (можно оставить) ====================
+        const APP_CONFIG = {
+            useOnlineMode: true,
+            websiteDomain: "https://www.mttt-mexanizator.uz"
+        };
+        // ======================================================================
 
-        const statusClass = status === 'Tasdiqlangan' ? 'success' : 'warning';
+        const monthsUz = {
+            1: 'yanvar', 2: 'fevral', 3: 'mart', 4: 'aprel',
+            5: 'may', 6: 'iyun', 7: 'iyul', 8: 'avgust',
+            9: 'sentabr', 10: 'oktabr', 11: 'noyabr', 12: 'dekabr'
+        };
 
-        document.getElementById('result').innerHTML = `
-            <div class="alert alert-${statusClass}">
-                <div class="d-flex justify-content-between align-items-center">
-                    <h5 class="mb-0">
-                        <i class="bi bi-${statusClass === 'success' ? 'check-circle' : 'exclamation-triangle'}"></i>
-                        Guvohnoma ${status}
-                    </h5>
-                    <span class="badge bg-${statusClass}">${status}</span>
-                </div>
-            </div>
-
-            <div class="info-item"><strong>Guvohnoma raqami:</strong><br>${certNumber}</div>
-            <div class="info-item"><strong>Talaba:</strong><br>${studentName}</div>
-            <div class="info-item"><strong>JShShIR:</strong><br><code>${jshshir}</code></div>
-
-            <div class="row">
-                <div class="col-md-6"><div class="info-item"><strong>Toifalar:</strong><br>${categories}</div></div>
-                <div class="col-md-6"><div class="info-item"><strong>Imtihon sanasi:</strong><br>${examDate}</div></div>
-            </div>
-
-            <div class="info-item"><strong>Rahbar:</strong><br>${director}</div>
-
-            <div class="mt-4 text-center text-muted">
-                <small>“MMM TRAKTOR SERVIS” MCHJ</small>
-            </div>
-        `;
-    }
-
-    function showError(message) {
-        document.getElementById('result').innerHTML = `
-            <div class="alert alert-danger">
-                <h5>Xatolik</h5>
-                <p>${message}</p>
-            </div>
-        `;
-    }
-
-    // ✅ НОВЫЙ, ПРАВИЛЬНЫЙ СПОСОБ
-    if (idParam) {
-        fetch(`/api/documents/${idParam}/details`)
-            .then(r => {
-                if (!r.ok) throw new Error();
-                return r.json();
-            })
-            .then(showCertificate)
-            .catch(() => showError("Guvohnoma topilmadi yoki bekor qilingan"));
-        return;
-    }
-
-    // 🔁 СТАРЫЙ QR (если остались)
-    if (dataParam) {
-        try {
-            const certData = JSON.parse(decodeURIComponent(dataParam));
-            showCertificate(certData);
-        } catch (e) {
-            showError("QR kod maʼlumotlari notoʻgʻri");
+        function parseDate(dateString) {
+            if (!dateString) return null;
+            try {
+                const date = new Date(dateString);
+                if (isNaN(date.getTime())) return null;
+                return {
+                    day: date.getDate(),
+                    month: date.getMonth() + 1,
+                    year: date.getFullYear(),
+                    monthName: monthsUz[date.getMonth() + 1] || 'unknown'
+                };
+            } catch {
+                return null;
+            }
         }
-        return;
-    }
 
-    showError("QR kod notoʻgʻri yoki eskirgan");
-})();
-</script>
+        function fillCertificate(doc) {
+            // Форматируем номер сертификата (как в certificate.html)
+            let certNumber = doc.certificate_number || '';
+            if (certNumber.startsWith('GUV-')) certNumber = certNumber.substring(4);
+            if (certNumber.includes('-')) certNumber = certNumber.split('-').pop();
+            const displayCertNumber = certNumber || doc.id.toString().padStart(6, '0');
 
+            document.getElementById('verify_certNumber').textContent = displayCertNumber;
+            document.getElementById('verify_studentName').textContent = doc.student_name || 'N/A';
+            document.getElementById('verify_jshshir').textContent = doc.student_jshshir || 'N/A';
+            document.getElementById('verify_categories').textContent = doc.categories || 'N/A';
+            document.getElementById('verify_courseHours').textContent = doc.course_hours || '0';
+
+            const commission = doc.commission_number || '15';
+            document.getElementById('verify_commissionNumber').textContent = commission;
+            document.getElementById('verify_directorName').textContent = doc.director_name || 'Y Usmonova';
+
+            // Даты
+            const courseStart = parseDate(doc.course_start);
+            if (courseStart) {
+                document.getElementById('verify_courseStartYear').textContent = courseStart.year;
+                document.getElementById('verify_courseStartDay').textContent = courseStart.day;
+                document.getElementById('verify_courseStartMonth').textContent = courseStart.monthName;
+            }
+            const courseEnd = parseDate(doc.course_end);
+            if (courseEnd) {
+                document.getElementById('verify_courseEndYear').textContent = courseEnd.year;
+                document.getElementById('verify_courseEndDay').textContent = courseEnd.day;
+                document.getElementById('verify_courseEndMonth').textContent = courseEnd.monthName;
+            }
+            const examDate = parseDate(doc.exam_date);
+            if (examDate) {
+                document.getElementById('verify_examYear').textContent = examDate.year;
+                document.getElementById('verify_examDay').textContent = examDate.day;
+                document.getElementById('verify_examMonth').textContent = examDate.monthName;
+            }
+
+            // Оценки
+            const grade1 = doc.grade1 || 4;
+            const grade2 = doc.grade2 || 4;
+            document.getElementById('verify_grade1Text').textContent = `${grade1} (yaxshi)`;
+            document.getElementById('verify_grade2Text').textContent = `${grade2} (yaxshi)`;
+        }
+
+        (function() {
+            const params = new URLSearchParams(window.location.search);
+            const idParam = params.get('id');
+
+            if (!idParam) {
+                document.getElementById('loadingIndicator').style.display = 'none';
+                document.getElementById('errorMessage').textContent = 'QR kod notoʻgʻri yoki eskirgan';
+                document.getElementById('errorContainer').style.display = 'block';
+                return;
+            }
+
+            fetch(`/api/documents/${idParam}/details`)
+                .then(res => {
+                    if (!res.ok) throw new Error('Document not found');
+                    return res.json();
+                })
+                .then(doc => {
+                    document.getElementById('loadingIndicator').style.display = 'none';
+                    fillCertificate(doc);
+                    document.getElementById('certificateContainer').style.display = 'block';
+                })
+                .catch(err => {
+                    console.error(err);
+                    document.getElementById('loadingIndicator').style.display = 'none';
+                    document.getElementById('errorMessage').textContent = 'Guvohnoma topilmadi yoki bekor qilingan';
+                    document.getElementById('errorContainer').style.display = 'block';
+                });
+        })();
+    </script>
 </body>
 </html>
-
-
