@@ -465,19 +465,19 @@ func documentDetails(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// ===== QR: ТОЛЬКО ССЫЛКА =====
-	qrURL := fmt.Sprintf(
-		"%s/verify.html?id=%d",
-		BaseURL,
-		detail.ID,
-	)
+	// qrURL := fmt.Sprintf(
+	// 	"%s/verify.html?id=%d",
+	// 	BaseURL,
+	// 	detail.ID,
+	// )
 
-	qrBase64, err := generateQRCode(qrURL)
-	if err != nil {
-		http.Error(w, "QR generation failed", 500)
-		return
-	}
+	// qrBase64, err := generateQRCode(qrURL)
+	// if err != nil {
+	// 	http.Error(w, "QR generation failed", 500)
+	// 	return
+	// }
 
-	detail.QRCodeBase64 = qrBase64
+	// detail.QRCodeBase64 = qrBase64
 
 	respondJSON(w, detail)
 }
