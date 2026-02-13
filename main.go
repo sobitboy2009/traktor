@@ -224,22 +224,15 @@ func getNextCertificateNumber() (string, error) {
 var BaseURL = "https://www.mttt-mexanizator.uz"
 
 func generateQRCode(data string) (string, error) {
-	qr, err := qrcode.New(data, qrcode.Medium)
-	if err != nil {
-		return "", err
-	}
-
-	var buf bytes.Buffer
-	img := qr.Image(256)
-
-	err = png.Encode(&buf, img)
-	if err != nil {
-		return "", err
-	}
-
-	return base64.StdEncoding.EncodeToString(buf.Bytes()), nil
+    qr, err := qrcode.New(data, qrcode.Low) // Low = крупные модули
+    if err != nil {
+        return "", err
+    }
+    var buf bytes.Buffer
+    img := qr.Image(512) // 512 пикселей
+    png.Encode(&buf, img)
+    return base64.StdEncoding.EncodeToString(buf.Bytes()), nil
 }
-
 
 /* =========================
    DASHBOARD
